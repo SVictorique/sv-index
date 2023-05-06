@@ -1,5 +1,5 @@
 <template>
-  <Row :gutter="24">
+  <Row :gutter="24" style="margin-right: 0">
     <Col
         v-for="row in tableData"
         :key="row.title"
