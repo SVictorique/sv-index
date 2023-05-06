@@ -1,19 +1,31 @@
-<script setup>
-import {Content, Header, Image, Layout, Menu} from "view-ui-plus";
-import { RouterView } from 'vue-router'
-</script>
-
 <template>
   <Layout :style="{ height: '100vh' }">
     <Header>
       <div class="layout-logo">
-        <Image src="/logo.svg" :height="58"></Image>
+        <Image :src="`${baseUrl}/logo.svg`" :height="58"></Image>
       </div>
       <h1 class="layout-title">银小维 Anime</h1>
     </Header>
     <Content :style="{ height: 'calc(100vh - 64px)', overflow: 'auto' }"><RouterView /></Content>
   </Layout>
 </template>
+
+<script>
+import { reactive, toRefs } from "vue";
+
+export default {
+  name: 'App',
+  setup() {
+    const data = reactive({
+      baseUrl: import.meta.env.BASE_URL,
+    });
+
+    return {
+      ...toRefs(data),
+    }
+  }
+}
+</script>
 
 <style scoped>
 .layout-logo{
