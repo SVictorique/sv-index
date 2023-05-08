@@ -126,9 +126,13 @@
       </Card>
     </Col>
   </Row>
+  <Spin fix :show="spinShow">
+    <Icon type="ios-loading" size=18 class="spin-icon-load"></Icon>
+    <div>Loading</div>
+  </Spin>
   <Page
       v-model="pageCurr"
-      :total="animeData.length"
+      :total="total"
       :page-size="pageSize"
       show-sizer
       show-elevator
@@ -138,27 +142,38 @@
 </template>
 
 <script>
-import { onBeforeMount, reactive, ref, toRefs } from 'vue';
 import { Tooltip } from 'view-ui-plus';
 
 export default {
   name: 'AnimeView',
   components: { Tooltip },
-  setup() {
-    const data = reactive({
+  data() {
+    return {
       pageSize: 12,
       pageCurr: 1,
       animeData: [],
       siteData: {},
       tableData: [],
-    });
-
-    const getTableData = async () => {
-      data.tableData = data.animeData.slice(
-          data.pageSize * (data.pageCurr - 1),
-          data.pageSize * data.pageCurr
-      );
-      for (const d of data.tableData) {
+      spinShow: true,
+      total: 0,
+    }
+  },
+  watch: {
+    '$route.query.search'() {
+      this.getTableData();
+    },
+  },
+  methods: {
+    async getTableData() {
+      const search = this.$route.query.search;
+      this.tableData = this.animeData
+          .filter((d) => !search || d.title.indexOf(search) !== -1);
+      this.total = this.tableData.length;
+      this.tableData = this.tableData.slice(
+              this.pageSize * (this.pageCurr - 1),
+              this.pageSize * this.pageCurr
+          );
+      for (const d of this.tableData) {
         let subjectId;
         for (const s of d.sites) {
           if (s.site === 'bangumi') {
@@ -192,44 +207,24 @@ export default {
 
             subjectHis[subjectId] = info;
             localStorage.setItem(subjectKey, JSON.stringify(subjectHis));
-          } catch (e) {}
+          } catch (e) { /* empty */ }
         }
 
         d.coverImgUrl = info.images.common;
         d.summary = info.summary;
         d.subTitle = info.name_cn;
       }
-    };
-
-    const pageSizeChange = () => {
-      getTableData();
-    };
-
-    onBeforeMount(async () => {
-      let bangumiData;
-      const storageKey = 'sv-anime-data';
-      const hisDataStr = localStorage.getItem(storageKey);
-      let needFetch = true;
-      if (hisDataStr) {
-        const hisData = JSON.parse(hisDataStr);
-        if (Date.now() - hisData.date < 1000 * 60 * 60 * 24) {
-          bangumiData = hisData.bangumiData;
-          needFetch = false;
-        }
-      }
-      if (needFetch) {
-        bangumiData = await fetch('https://unpkg.com/bangumi-data@0.3/dist/data.json').then((res) => res.json());
-        localStorage.setItem(storageKey, JSON.stringify({
-          date: Date.now(),
-          bangumiData,
-        }));
-      }
-      data.siteData = bangumiData.siteMeta;
-      data.animeData = bangumiData.items.reverse();
-      getTableData();
-    });
-
-    const parseLang = (lang) => {
+    },
+    pageSizeChange() {
+      this.$router.push({
+        query: Object.assign({}, this.$route.query, {
+          size: this.pageSize,
+          num: this.pageCurr,
+        })
+      })
+      this.getTableData();
+    },
+    parseLang(lang) {
       if (lang === 'ja') {
         return '日语';
       }
@@ -243,13 +238,34 @@ export default {
         return '繁中';
       }
       return lang;
-    };
+    },
+  },
+  async beforeMount() {
+    this.pageSize = Number(this.$route.query.size) || this.pageSize;
+    this.pageCurr = Number(this.$route.query.num) || this.pageCurr;
 
-    return {
-      ...toRefs(data),
-      pageSizeChange,
-      parseLang,
-    };
+    let bangumiData;
+    const storageKey = 'sv-anime-data';
+    const hisDataStr = localStorage.getItem(storageKey);
+    let needFetch = true;
+    if (hisDataStr) {
+      const hisData = JSON.parse(hisDataStr);
+      if (Date.now() - hisData.date < 1000 * 60 * 60 * 24) {
+        bangumiData = hisData.bangumiData;
+        needFetch = false;
+      }
+    }
+    if (needFetch) {
+      bangumiData = await fetch('https://unpkg.com/bangumi-data@0.3/dist/data.json').then((res) => res.json());
+      localStorage.setItem(storageKey, JSON.stringify({
+        date: Date.now(),
+        bangumiData,
+      }));
+    }
+    this.siteData = bangumiData.siteMeta;
+    this.animeData = bangumiData.items.reverse();
+    await this.getTableData();
+    this.spinShow = false;
   },
 };
 </script>
@@ -257,6 +273,14 @@ export default {
 <style scoped>
 .ivu-form-item {
   margin-bottom: 0;
+}
+.spin-icon-load{
+  animation: ani-spin 1s linear infinite;
+}
+@keyframes ani-spin {
+  from { transform: rotate(0deg);}
+  50%  { transform: rotate(180deg);}
+  to   { transform: rotate(360deg);}
 }
 </style>
 <style>
