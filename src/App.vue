@@ -1,10 +1,10 @@
 <template>
   <Layout :style="{ height: '100vh' }">
     <Header>
-      <div class="layout-logo">
+      <div class="layout-logo" @click="this.$router.push(`/`)" style="cursor: pointer">
         <Image :src="`${baseUrl}/logo.svg`" :height="58"></Image>
       </div>
-      <h1 class="layout-title">银小维 Anime</h1>
+      <h1 class="layout-title" @click="this.$router.push(`/`)" style="cursor: pointer">银小维 Anime</h1>
       <Avatar
           icon="logo-github"
           style="background-color: #000; color: #fff; margin-left: 12px; cursor: pointer"

@@ -1,5 +1,9 @@
 @import './base.css';
 
+* {
+    word-wrap: break-word;
+}
+
 a {
     width: 100%;
     display: block;

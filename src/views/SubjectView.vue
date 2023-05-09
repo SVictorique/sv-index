@@ -18,7 +18,7 @@
             :alt="info.name"
             style="width: 100%; max-height: 800px;"
             preview
-            :preview-list="[info.images.large]"
+            :preview-list="[info.images?.large]"
             transfer
         >
           <template #error>
@@ -78,7 +78,7 @@
           </List>
         </TabPane>
         <TabPane label="章节" class="tag-pane">
-          <List>
+          <List v-show="tagName === 1">
             <ListItem
                 v-for="row in episodes"
                 :key="row.index"
@@ -126,25 +126,31 @@
           </Row>
         </TabPane>
         <TabPane label="制作人员" class="tag-pane">
-          <Card
-              v-for="(row, index) in persons"
-              :key="index"
-              class="ivu-fl"
-              style="margin: 5px"
-              v-show="tagName === 3"
-          >
-            <template #title>{{ row.relation }}</template>
-            <Image
-                :src="row.images.small || 'https://lain.bgm.tv/img/no_icon_subject.png'"
-                fit="contain"
-                style="width: 100px; height: 100px;"
-                preview
-                :preview-list="persons.map(s => s.images.large)"
-                transfer
-                :initial-index="index"
-            ></Image><br/><br/>
-            <a @click="this.$router.push(`/person/${row.id}`)">{{ row.name }}</a>
-          </Card>
+          <Row :gutter="5" v-show="tagName === 3">
+            <Col
+                :xs="8"
+                :sm="8"
+                :md="6"
+                :lg="6"
+                :xl="4"
+                :xxl="2"
+                v-for="(row, index) in persons"
+                :key="index"
+            >
+              <Card>
+                <template #title>{{ row.relation }}</template>
+                <Image
+                    :src="row.images.small || 'https://lain.bgm.tv/img/no_icon_subject.png'"
+                    fit="contain"
+                    preview
+                    :preview-list="persons.map(s => s.images.large)"
+                    transfer
+                    :initial-index="index"
+                ></Image><br/><br/>
+                <a @click="this.$router.push(`/person/${row.id}`)">{{ row.name }}</a>
+              </Card>
+            </Col>
+          </Row>
         </TabPane>
         <TabPane label="关联条目" class="tag-pane">
           <Row :gutter="5" v-show="tagName === 4">
@@ -197,15 +203,11 @@ import {
   Icon,
   Form,
   FormItem,
-  Collapse,
-  Panel, TabPane,
+  TabPane,
 } from "view-ui-plus";
 export default {
   name: "SubjectView",
-  components: {
-    TabPane,
-    Panel,
-    Collapse, Card, Text, Row, Col, Image, List, ListItem, ListItemMeta, Tag, Icon, Form, FormItem },
+  components: { TabPane, Card, Text, Row, Col, Image, List, ListItem, ListItemMeta, Tag, Icon, Form, FormItem },
   props: ['subjectId'],
   data() {
     return {
@@ -230,14 +232,10 @@ export default {
     async initData() {
       this.spinShow = true;
       this.info = await this.$common.getSubjectInfo(this.subjectId);
-      this.episodes = (await fetch(`https://api.bgm.tv/v0/episodes?subject_id=${this.subjectId}`)
-          .then((res) => res.json())).data;
-      this.characters = await fetch(`https://api.bgm.tv/v0/subjects/${this.subjectId}/characters`)
-          .then((res) => res.json());
-      this.subjects = await fetch(`https://api.bgm.tv/v0/subjects/${this.subjectId}/subjects`)
-          .then((res) => res.json());
-      this.persons = await fetch(`https://api.bgm.tv/v0/subjects/${this.subjectId}/persons`)
-          .then((res) => res.json());
+      this.episodes = (await this.$common.getSubjectEpisodes(this.subjectId)).data;
+      this.characters = await this.$common.getSubjectCharacters(this.subjectId);
+      this.subjects = await this.$common.getSubjectSubjects(this.subjectId);
+      this.persons = await this.$common.getSubjectPersons(this.subjectId);
       this.spinShow = false;
     }
   }
