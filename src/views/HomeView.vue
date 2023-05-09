@@ -1,5 +1,23 @@
 <template>
   <Row :gutter="24" style="margin-right: 0">
+    <Col style="padding: 10px 0 10px 24px">
+      <Input v-model="search" placeholder="Search" class="ivu-fr" style="width: 200px" clearable>
+        <template #suffix>
+          <Icon type="ios-search" />
+        </template>
+      </Input>
+    </Col>
+    <Col style="padding: 10px 0 10px 24px">
+      <DatePicker
+          type="month"
+          format="yyyy-MM"
+          v-model="month"
+          placeholder="Select month"
+          style="width: 200px"
+      />
+    </Col>
+  </Row>
+  <Row :gutter="24" style="margin-right: 0">
     <Col
         v-for="row in tableData"
         :key="row.title"
@@ -156,18 +174,43 @@ export default {
       tableData: [],
       spinShow: true,
       total: 0,
+      search: '',
+      month: '',
     }
   },
   watch: {
-    '$route.query.search'() {
+    '$route.query'() {
       this.getTableData();
     },
+    search(s) {
+      this.$router.push({
+        query: Object.assign({}, this.$route.query, { search: s })
+      });
+    },
+    month(m) {
+      this.$router.push({
+        query: Object.assign({}, this.$route.query, { month: m ? this.$Date(m).format('YYYY-MM') : '' })
+      });
+    }
   },
   methods: {
     async getTableData() {
       const search = this.$route.query.search;
+      const month = this.$route.query.month;
+
       this.tableData = this.animeData
-          .filter((d) => !search || d.title.indexOf(search) !== -1);
+          .filter((d) => {
+            for (const key in d.titleTranslate) {
+              if (d.titleTranslate[key][0].indexOf(search) !== -1) {
+                return true;
+              }
+            }
+            return !search || d.title.indexOf(search) !== -1;
+          })
+          .filter((d) => {
+            return !month || d.begin.indexOf(month) !== -1;
+          });
+
       this.total = this.tableData.length;
       this.tableData = this.tableData.slice(
               this.pageSize * (this.pageCurr - 1),
@@ -222,7 +265,6 @@ export default {
           num: this.pageCurr,
         })
       })
-      this.getTableData();
     },
     parseLang(lang) {
       if (lang === 'ja') {
@@ -243,6 +285,8 @@ export default {
   async beforeMount() {
     this.pageSize = Number(this.$route.query.size) || this.pageSize;
     this.pageCurr = Number(this.$route.query.num) || this.pageCurr;
+    this.search = this.$route.query.search;
+    this.month = this.$route.query.month;
 
     let bangumiData;
     const storageKey = 'sv-anime-data';
@@ -257,15 +301,16 @@ export default {
     }
     if (needFetch) {
       bangumiData = await fetch('https://unpkg.com/bangumi-data@0.3/dist/data.json').then((res) => res.json());
-      localStorage.setItem(storageKey, JSON.stringify({
-        date: Date.now(),
-        bangumiData,
-      }));
+      if (window.navigator.userAgent.indexOf('Safari') === -1) {
+        localStorage.setItem(storageKey, JSON.stringify({
+          bangumiData,
+        }));
+      }
     }
     this.siteData = bangumiData.siteMeta;
     this.animeData = bangumiData.items.reverse();
-    await this.getTableData();
     this.spinShow = false;
+    await this.getTableData();
   },
 };
 </script>

@@ -5,11 +5,11 @@
         <Image :src="`${baseUrl}/logo.svg`" :height="58"></Image>
       </div>
       <h1 class="layout-title">银小维 Anime</h1>
-      <Input v-model="search" placeholder="Search" class="ivu-fr" style="width: 200px">
-        <template #suffix>
-          <Icon type="ios-search" />
-        </template>
-      </Input>
+      <Avatar
+          icon="logo-github"
+          style="background-color: #000; color: #fff; margin-left: 12px; cursor: pointer"
+          @click="openGithub"
+      />
     </Header>
     <Content :style="{ height: 'calc(100vh - 64px)', overflow: 'auto' }"><RouterView/></Content>
   </Layout>
@@ -21,19 +21,13 @@ export default {
   data() {
     return {
       baseUrl: import.meta.env.BASE_URL,
-      search: '',
     };
   },
-  watch: {
-    search(s) {
-      this.$router.push({
-        query: Object.assign({}, this.$route.query, { search: s })
-      });
+  methods: {
+    openGithub() {
+      window.open('https://github.com/SVictorique/sv-anime')
     },
   },
-  beforeMount() {
-    this.search = this.$route.query.search;
-  }
 }
 </script>
 
