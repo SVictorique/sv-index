@@ -4,7 +4,7 @@
       <Text>{{ info.name }}</Text>
     </template>
   </PageHeader>
-  <Row>
+  <Row :gutter="5" style="margin: 0">
     <Col
         :xs="24"
         :sm="8"
@@ -16,7 +16,7 @@
             :src="info.images?.medium || 'https://lain.bgm.tv/img/no_icon_subject.png'"
             fit="cover"
             :alt="info.name"
-            style="width: 100%; max-height: 800px;"
+            style="width: 100%"
             preview
             :preview-list="[info.images?.large]"
             transfer
@@ -61,7 +61,7 @@
         <ListItem>
           <ListItemMeta title="出演">
             <template #description>
-              <Row :gutter="24">
+              <Row :gutter="24" style="margin: 0;">
                 <Col
                     v-for="(row, index) in persons"
                     :key="index"
@@ -105,7 +105,7 @@
         <ListItem>
           <ListItemMeta title="关联条目">
             <template #description>
-              <Row :gutter="5">
+              <Row :gutter="5" style="margin: 0;">
                 <Col
                     :xs="12"
                     :sm="12"
