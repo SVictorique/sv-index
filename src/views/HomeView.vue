@@ -84,14 +84,29 @@
                 "
                   fit="cover"
                   :alt="row.title"
+                  style="width: 100%"
               >
                 <template #error>
-                  <Icon type="ios-image-outline" size="24" color="#ccc" />
+                  <Icon type="ios-image-outline" size="24" />
                 </template>
               </Image>
+              <Text
+                  v-if="row.epCnt"
+                  style="position: absolute; bottom: 1px; left: 1px; right: 1px; height: 30px; line-height: 30px; z-index: 1; color: #fff; font-size: 14px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); text-align: right;"
+              >
+                <span style="position: absolute; left: 5px">话数：{{ row.epCnt }}</span>
+                <span style="position: absolute; right: 5px">评分：{{ row.rate }}</span>
+              </Text>
             </Poptip>
           </Col>
           <Col :xs="24" :sm="24" :md="24" :xl="16">
+            <Text
+                type="secondary"
+                @click="goSubject(row.subjectId)"
+                style="position: absolute; top: 0; right: 12px; line-height: 32px; font-size: 12px; cursor:pointer; z-index: 1"
+            >
+              <Icon type="ios-more" /> 更多
+            </Text>
             <Form :label-colon="true" :label-width="50">
               <FormItem label="类型" class="ivu-text-left">
                 {{ row.type }}
@@ -217,6 +232,7 @@ export default {
               this.pageSize * this.pageCurr
           );
       for (const d of this.tableData) {
+        console.log(d)
         let subjectId;
         for (const s of d.sites) {
           if (s.site === 'bangumi') {
@@ -228,34 +244,14 @@ export default {
           continue;
         }
 
-        const subjectKey = 'sv-anime-subject';
-        if (!localStorage.getItem(subjectKey)) {
-          localStorage.setItem(subjectKey, JSON.stringify({}));
-        }
-        const subjectHis = JSON.parse(localStorage.getItem(subjectKey));
+        const info = await this.$common.getSubjectInfo(subjectId);
 
-        let info;
-        if (subjectHis[subjectId]) {
-          info = subjectHis[subjectId];
-        } else {
-          try {
-            info = await fetch(`https://api.bgm.tv/v0/subjects/${subjectId}`)
-                .then((res) => {
-                  if (!res.ok) {
-                    throw new Error(res.status);
-                  }
-                  return res;
-                })
-                .then((res) => res.json());
-
-            subjectHis[subjectId] = info;
-            localStorage.setItem(subjectKey, JSON.stringify(subjectHis));
-          } catch (e) { /* empty */ }
-        }
-
+        d.subjectId = subjectId;
         d.coverImgUrl = info.images.common;
         d.summary = info.summary;
         d.subTitle = info.name_cn;
+        d.rate = info.rating.score.toFixed(1);
+        d.epCnt = info.eps;
       }
     },
     pageSizeChange() {
@@ -280,6 +276,9 @@ export default {
         return '繁中';
       }
       return lang;
+    },
+    goSubject(subjectId) {
+      this.$router.push(`subject/${subjectId}`);
     },
   },
   async beforeMount() {
