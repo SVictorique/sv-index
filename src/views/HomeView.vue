@@ -337,4 +337,7 @@ export default {
 .ivu-grid-item-main {
   height: 100%;
 }
+.ivu-poptip-rel {
+  width: 100%;
+}
 </style>
