@@ -47,7 +47,7 @@
           :xs="24"
           :sm="16"
       >
-        <List style="padding: 0 10px">
+        <List style="padding: 0 10px; width: 100%;">
           <ListItem>
             <span style="color: #f5a623; font-size: 20px; margin-right: 40px;">
               <Icon type="ios-stats" />{{ info.rating?.rank }}
@@ -66,20 +66,23 @@
               </template>
             </ListItemMeta>
           </ListItem>
-          <ListItem>
-            <ListItemMeta title="Episodes">
+          <ListItem style="width: 100%;">
+            <ListItemMeta title="Episodes" style="width: 100%;">
               <template #description>
-                <Collapse>
+                <Collapse style="width: 100%;">
                   <Panel
                       v-for="row in episodes"
                       :key="row.index"
+                      style="overflow: auto; width: 100%"
                   >
                     <template v-if="row.type === 0">[EP</template>
                     <template v-else-if="row.type === 1">[SP</template>
                     <template v-else-if="row.type === 2">[OP</template>
                     <template v-else-if="row.type === 3">[ED</template>
-                    {{ String(row.ep+1).padStart(2, '0') }}] {{ row.name }}
-                    <template #content><pre>{{ row.desc }}</pre></template>
+                    {{ String(row.ep).padStart(2, '0') }}] {{ row.name }}
+                    <template #content>
+                      <pre>{{ row.desc }}</pre>
+                    </template>
                   </Panel>
                 </Collapse>
               </template>
@@ -200,5 +203,10 @@ export default {
 <style scoped>
 .ivu-list-item:first-of-type {
   padding-top: 0;
+}
+</style>
+<style>
+.ivu-list-item-meta-content {
+  width: 100%;
 }
 </style>

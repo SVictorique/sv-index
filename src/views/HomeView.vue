@@ -101,11 +101,11 @@
           </Col>
           <Col :xs="24" :sm="24" :md="24" :xl="16">
             <Text
-                type="secondary"
+                type="success"
                 @click="goSubject(row.subjectId)"
-                style="position: absolute; top: 0; right: 12px; line-height: 32px; font-size: 12px; cursor:pointer; z-index: 1"
+                style="position: absolute; top: 0; right: 12px; line-height: 32px; font-size: 16px; cursor:pointer; z-index: 1"
             >
-              <Icon type="ios-more" /> 更多
+              更多
             </Text>
             <Form :label-colon="true" :label-width="50">
               <FormItem label="类型" class="ivu-text-left">
