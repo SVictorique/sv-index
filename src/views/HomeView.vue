@@ -91,7 +91,7 @@
                 </template>
               </Image>
               <Text
-                  v-if="row.epCnt"
+                  v-if="row.subjectId"
                   style="position: absolute; bottom: 1px; left: 1px; right: 1px; height: 30px; line-height: 30px; z-index: 1; color: #fff; font-size: 14px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); text-align: right;"
               >
                 <span style="position: absolute; left: 5px">话数：{{ row.epCnt }}</span>
@@ -104,6 +104,7 @@
                 type="success"
                 @click="goSubject(row.subjectId)"
                 style="position: absolute; top: 0; right: 12px; line-height: 32px; font-size: 16px; cursor:pointer; z-index: 1"
+                v-if="row.subjectId"
             >
               更多
             </Text>
@@ -232,7 +233,6 @@ export default {
               this.pageSize * this.pageCurr
           );
       for (const d of this.tableData) {
-        console.log(d)
         let subjectId;
         for (const s of d.sites) {
           if (s.site === 'bangumi') {
@@ -251,7 +251,7 @@ export default {
         d.summary = info.summary;
         d.subTitle = info.name_cn;
         d.rate = info.rating.score.toFixed(1);
-        d.epCnt = info.eps;
+        d.epCnt = info.eps || info.total_episodes;
       }
     },
     pageSizeChange() {

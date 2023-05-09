@@ -1,1 +1,16 @@
 @import './base.css';
+
+a {
+    width: 100%;
+    display: block;
+    word-wrap: break-word;
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.ivu-page-item a{
+    margin: 0 !important;
+}
