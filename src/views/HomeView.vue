@@ -1,5 +1,5 @@
 <template>
-  <Row :gutter="24" style="margin-right: 0">
+  <Row :gutter="24">
     <Col style="padding: 10px 0 10px 24px">
       <Input v-model="search" placeholder="Search" class="ivu-fr" style="width: 200px" clearable>
         <template #suffix>
@@ -17,7 +17,7 @@
       />
     </Col>
   </Row>
-  <Row :gutter="24" style="margin-right: 0">
+  <Row :gutter="24">
     <Col
         v-for="row in tableData"
         :key="row.title"
@@ -25,7 +25,7 @@
         :sm="24"
         :md="12"
         :xxl="8"
-        style="margin: 24px 0"
+        style="margin: 12px 0"
     >
       <Card style="height: 100%">
         <template #title>
@@ -164,15 +164,17 @@
     <Icon type="ios-loading" size=18 class="spin-icon-load"></Icon>
     <div>Loading</div>
   </Spin>
-  <Page
-      v-model="pageCurr"
-      :total="total"
-      :page-size="pageSize"
-      show-sizer
-      show-elevator
-      @on-change="pageSizeChange"
-      @on-page-size-change="pageSizeChange"
-  />
+  <Card>
+    <Page
+        v-model="pageCurr"
+        :total="total"
+        :page-size="pageSize"
+        show-sizer
+        show-elevator
+        @on-change="pageSizeChange"
+        @on-page-size-change="pageSizeChange"
+    />
+  </Card>
 </template>
 
 <script>
@@ -196,11 +198,17 @@ export default {
   },
   watch: {
     '$route.query'() {
+      this.search = this.$route.query.search;
+      this.pageSize = this.$route.query.size || 12;
+      this.pageCurr = this.$route.query.num || 1;
       this.getTableData();
     },
     search(s) {
       this.$router.push({
-        query: Object.assign({}, this.$route.query, { search: s })
+        query: Object.assign({}, this.$route.query, {
+          search: s,
+          num: 1,
+        })
       });
     },
     month(m) {

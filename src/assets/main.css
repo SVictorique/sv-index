@@ -18,3 +18,7 @@ pre {
 .ivu-page-item a{
     margin: 0 !important;
 }
+
+.ivu-row {
+    margin: 0 !important;
+}
