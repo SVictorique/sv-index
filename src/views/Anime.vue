@@ -181,7 +181,7 @@
 import { Tooltip } from 'view-ui-plus';
 
 export default {
-  name: 'AnimeView',
+  name: 'anime-view',
   components: { Tooltip },
   data() {
     return {
@@ -204,17 +204,21 @@ export default {
       this.getTableData();
     },
     search(s) {
-      this.$router.push({
-        query: Object.assign({}, this.$route.query, {
-          search: s,
-          num: 1,
-        })
-      });
+      if (this.search !== s || this.pageCurr !== 1) {
+        this.$router.push({
+          query: Object.assign({}, this.$route.query, {
+            search: s,
+            num: 1,
+          })
+        });
+      }
     },
     month(m) {
-      this.$router.push({
-        query: Object.assign({}, this.$route.query, { month: m ? this.$Date(m).format('YYYY-MM') : '' })
-      });
+      if (this.month !== m) {
+        this.$router.push({
+          query: Object.assign({}, this.$route.query, { month: m ? this.$Date(m).format('YYYY-MM') : '' })
+        });
+      }
     }
   },
   methods: {
@@ -237,9 +241,9 @@ export default {
 
       this.total = this.tableData.length;
       this.tableData = this.tableData.slice(
-              this.pageSize * (this.pageCurr - 1),
-              this.pageSize * this.pageCurr
-          );
+          this.pageSize * (this.pageCurr - 1),
+          this.pageSize * this.pageCurr
+      );
       for (const d of this.tableData) {
         let subjectId;
         for (const s of d.sites) {
@@ -286,7 +290,7 @@ export default {
       return lang;
     },
     goSubject(subjectId) {
-      this.$router.push(`subject/${subjectId}`);
+      this.$router.push(`/subject/${subjectId}`);
     },
   },
   async beforeMount() {

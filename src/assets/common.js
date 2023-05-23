@@ -1,5 +1,7 @@
 import { reactive } from 'vue';
 
+const bgmApiRoot = 'https://api.bgm.tv';
+
 const getCacheData = async (key, id, url) => {
   if (!sessionStorage.getItem(key)) {
     sessionStorage.setItem(key, JSON.stringify({}));
@@ -31,38 +33,41 @@ const getCacheData = async (key, id, url) => {
 
 export const common = reactive({
   async getSubjectInfo(id) {
-    return getCacheData('sv-anime-subject', id, `https://api.bgm.tv/v0/subjects/${id}`);
+    return getCacheData('sv-anime-subject', id, `${bgmApiRoot}/v0/subjects/${id}`);
   },
   async getSubjectEpisodes(id) {
-    return getCacheData('sv-anime-subject-episodes', id, `https://api.bgm.tv/v0/episodes?subject_id=${id}`);
+    return getCacheData('sv-anime-subject-episodes', id, `${bgmApiRoot}/v0/episodes?subject_id=${id}`);
   },
   async getSubjectCharacters(id) {
-    return getCacheData('sv-anime-subject-characters', id, `https://api.bgm.tv/v0/subjects/${id}/characters`);
+    return getCacheData('sv-anime-subject-characters', id, `${bgmApiRoot}/v0/subjects/${id}/characters`);
   },
   async getSubjectPersons(id) {
-    return getCacheData('sv-anime-subject-persons', id, `https://api.bgm.tv/v0/subjects/${id}/persons`);
+    return getCacheData('sv-anime-subject-persons', id, `${bgmApiRoot}/v0/subjects/${id}/persons`);
   },
   async getSubjectSubjects(id) {
-    return getCacheData('sv-anime-subject-subjects', id, `https://api.bgm.tv/v0/subjects/${id}/subjects`);
+    return getCacheData('sv-anime-subject-subjects', id, `${bgmApiRoot}/v0/subjects/${id}/subjects`);
   },
 
   async getCharacterInfo(id) {
-    return getCacheData('sv-anime-character', id, `https://api.bgm.tv/v0/characters/${id}`);
+    return getCacheData('sv-anime-character', id, `${bgmApiRoot}/v0/characters/${id}`);
   },
   async getCharacterPersons(id) {
-    return getCacheData('sv-anime-character-persons', id, `https://api.bgm.tv/v0/characters/${id}/persons`);
+    return getCacheData('sv-anime-character-persons', id, `${bgmApiRoot}/v0/characters/${id}/persons`);
   },
   async getCharacterSubjects(id) {
-    return getCacheData('sv-anime-character-subjects', id, `https://api.bgm.tv/v0/characters/${id}/subjects`);
+    return getCacheData('sv-anime-character-subjects', id, `${bgmApiRoot}/v0/characters/${id}/subjects`);
   },
 
   async getPersonInfo(id) {
-    return getCacheData('sv-anime-person', id, `https://api.bgm.tv/v0/persons/${id}`);
+    return getCacheData('sv-anime-person', id, `${bgmApiRoot}/v0/persons/${id}`);
   },
   async getPersonCharacter(id) {
-    return getCacheData('sv-anime-person-characters', id, `https://api.bgm.tv/v0/persons/${id}/characters`);
+    return getCacheData('sv-anime-person-characters', id, `${bgmApiRoot}/v0/persons/${id}/characters`);
   },
   async getPersonSubjects(id) {
-    return getCacheData('sv-anime-person-subjects', id, `https://api.bgm.tv/v0/persons/${id}/subjects`);
+    return getCacheData('sv-anime-person-subjects', id, `${bgmApiRoot}/v0/persons/${id}/subjects`);
   },
+  async getCalendar() {
+    return getCacheData('sv-anime-calendar', 'default', `${bgmApiRoot}/calendar`);
+  }
 });

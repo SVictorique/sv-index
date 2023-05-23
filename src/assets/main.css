@@ -22,3 +22,19 @@ pre {
 .ivu-row {
     margin: 0 !important;
 }
+
+body {
+    overflow-y: hidden;
+}
+
+#app {
+    min-width: 320px;
+}
+
+#app .ivu-layout-header {
+    padding: 0 8px;
+}
+
+#app .ivu-image-img {
+    vertical-align: top;
+}

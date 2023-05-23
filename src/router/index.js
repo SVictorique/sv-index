@@ -1,8 +1,13 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '@/views/HomeView.vue'
-import SubjectView from "@/views/SubjectView.vue";
-import CharacterView from "@/views/CharacterView.vue";
-import PersonView from "@/views/PersonView.vue";
+import { createRouter, createWebHashHistory } from 'vue-router';
+import Home from '@/views/Home.vue';
+import Anime from "@/views/Anime.vue";
+import Book from "@/views/Book.vue";
+import Music from "@/views/Music.vue";
+import Game from "@/views/Game.vue";
+import Real from "@/views/Real.vue";
+import Subject from "@/components/Subject.vue";
+import Character from "@/components/Character.vue";
+import Person from "@/components/Person.vue";
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -10,24 +15,49 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: Home,
+    },
+    {
+      path: '/anime',
+      name: 'anime',
+      component: Anime,
+    },
+    {
+      path: '/book',
+      name: 'book',
+      component: Book,
+    },
+    {
+      path: '/music',
+      name: 'music',
+      component: Music,
+    },
+    {
+      path: '/game',
+      name: 'game',
+      component: Game,
+    },
+    {
+      path: '/real',
+      name: 'real',
+      component: Real,
     },
     {
       path: '/subject/:subjectId',
       name: 'subject',
-      component: SubjectView,
+      component: Subject,
       props: true,
     },
     {
       path: '/character/:characterId',
       name: 'character',
-      component: CharacterView,
+      component: Character,
       props: true,
     },
     {
       path: '/person/:personId',
       name: 'person',
-      component: PersonView,
+      component: Person,
       props: true,
     }
   ]
