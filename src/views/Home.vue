@@ -1,18 +1,21 @@
 <template>
-  <Row :gutter="8">
-    <Col v-for="i in 7" :key="i" :span="3" :offset="1">
-      <Space direction="vertical">
-        <Row><Text>{{ days[i-1] }}</Text></Row>
-        <Row
-            v-for="item of calendarData[i-1]"
-            :key="item.id"
-            @click="$router.push(`/subject/${item.id}`)"
-            style="cursor: pointer;"
-        >
-          <Image :src="item.images ? item.images.common : 'https://lain.bgm.tv/img/no_icon_subject.png'"></Image>
-          <Text
-              ellipsis
-              style="position: absolute;
+  <div class="container">
+    <Row :gutter="8">
+      <Col v-for="i in 7" :key="i" :xs="8" :sm="6" :md="3">
+        <Space direction="vertical">
+          <Row><Text>{{ days[i-1] }}</Text></Row>
+          <Row
+              v-for="item of calendarData[i-1]"
+              :key="item.id"
+              @click="$router.push(`/subject/${item.id}`)"
+              style="cursor: pointer;"
+          >
+            <Image
+                :src="item.images ? item.images.common : 'https://lain.bgm.tv/img/no_icon_subject.png'"
+            ></Image>
+            <Text
+                ellipsis
+                style="position: absolute;
               bottom: 1px;
               left: 1px;
               right: 1px;
@@ -25,13 +28,14 @@
               background-color: rgba(0, 0, 0, 0.7);
               text-align: right;
               padding-right: 8px"
-          >
-            {{ item.name_cn || item.name }}
-          </Text>
-        </Row>
-      </Space>
-    </Col>
-  </Row>
+            >
+              {{ item.name_cn || item.name }}
+            </Text>
+          </Row>
+        </Space>
+      </Col>
+    </Row>
+  </div>
 </template>
 
 <script>
@@ -66,5 +70,9 @@ export default {
 </script>
 
 <style scoped>
-
+@media screen and (min-width: 768px) {
+  .container {
+    padding-left: 100px;
+  }
+}
 </style>
