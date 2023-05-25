@@ -2,6 +2,7 @@
   <Space direction="vertical" size="large" class="container">
     <Card :bordered="false" v-for="subject in subjects" :key="subject.title">
       <template #title>{{ subject.title }}</template>
+      <template #extra><Link @click="$router.push(subject.href)">更多</Link></template>
       <Row :gutter="8">
         <Col
             :xs="12"
@@ -41,31 +42,36 @@
 </template>
 
 <script>
-import {Card} from "view-ui-plus";
+import {Card, Link} from "view-ui-plus";
 export default {
   name: 'home-view',
-  components: {Card},
+  components: {Link, Card},
   data() {
     return {
       subjects: [{
         type: 2,
         title: '动画',
+        href: '/anime',
         data: [],
       }, {
         type: 1,
         title: '书籍',
+        href: '/book',
         data: [],
       }, {
         type: 3,
         title: '音乐',
+        href: '/music',
         data: [],
       }, {
         type: 4,
         title: '游戏',
+        href: '/game',
         data: [],
       }, {
         type: 6,
         title: '三次元',
+        href: '/real',
         data: [],
       }],
     }
