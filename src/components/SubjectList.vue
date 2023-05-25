@@ -1,5 +1,40 @@
 <template>
-  <Row :gutter="24"></Row>
+  <Card>
+    <Form inline label-position="right" :label-width="100">
+      <FormItem label="关键字">
+        <Input v-model="keyword" placeholder="Keyword" class="ivu-fr" style="width: 200px" clearable>
+          <template #suffix>
+            <Icon type="ios-search" />
+          </template>
+        </Input>
+      </FormItem>
+      <FormItem label="排序">
+        <Select v-model="sort" @on-change="filterChange">
+          <Option value="heat">热度</Option>
+          <Option value="score">评分</Option>
+          <Option value="rank">排名</Option>
+        </Select>
+      </FormItem>
+      <FormItem label="时间">
+        <DatePicker
+            type="date"
+            format="yyyy-MM-dd"
+            v-model="dateStart"
+            placeholder="Date Start"
+            style="width: 200px"
+            @on-change="filterChange"
+        />
+        <DatePicker
+            type="date"
+            format="yyyy-MM-dd"
+            v-model="dateEnd"
+            placeholder="Date End"
+            style="width: 200px"
+            @on-change="filterChange"
+        />
+      </FormItem>
+    </Form>
+  </Card>
   <Row :gutter="24">
     <Col
         v-for="row in listData"
@@ -66,17 +101,19 @@
         :page-size="pageSize"
         show-sizer
         show-elevator
-        @on-change="pageChange"
-        @on-page-size-change="pageChange"
+        @on-change="filterChange"
+        @on-page-size-change="filterChange"
     />
   </Card>
 </template>
 
 <script>
 import {useSubjectList} from "@/stores/subject-list";
+import {FormItem, Option, Select} from "view-ui-plus";
 
 export default {
   name: "SubjectList",
+  components: {FormItem, Option, Select},
   data() {
     return {
       type: 2,
@@ -84,28 +121,41 @@ export default {
       pageSize: 12,
       pageCurr: 1,
       total: 0,
+      keyword: '',
       sort: 'heat',// score|heat|rank
+      dateStart: '',
+      dateEnd: '',
       spinShow: false,
     };
   },
   watch: {
     '$route.query'() {
-      this.pageSize = Number(this.$route.query.size) || 12;
       this.pageCurr = Number(this.$route.query.num) || 1;
       this.fetchData();
     }
   },
   methods: {
-    pageChange() {
+    filterChange() {
       this.$router.push({
         query: Object.assign({}, this.$route.query, {
           size: this.pageSize,
           num: this.pageCurr,
+          keyword: this.keyword,
+          sort: this.sort,
+          dateStart: this.dateStart ? this.$Date(this.dateStart).format('YYYY-MM-DD') : '',
+          dateEnd: this.dateEnd ? this.$Date(this.dateEnd).format('YYYY-MM-DD') : '',
         })
       })
     },
     fetchData() {
       this.spinShow = true;
+      const airDate = [];
+      if (this.dateStart) {
+        airDate.push(`>=${this.$Date(this.dateStart).format('YYYY-MM-DD')}`);
+      }
+      if (this.dateEnd) {
+        airDate.push(`<=${this.$Date(this.dateEnd).format('YYYY-MM-DD')}`);
+      }
       fetch(`${this.$common.bgmApiRoot}/v0/search/subjects?limit=${this.pageSize}&offset=${(this.pageCurr - 1) * this.pageSize}`, {
         method: 'post',
         body: JSON.stringify({
@@ -113,7 +163,8 @@ export default {
           filter: {
             type: [this.type],
             NSFW: true,
-            air_date: [],
+            keyword: this.keyword,
+            air_date: airDate,
             tag: [],
             rating: [],
             rank: [],
@@ -130,13 +181,19 @@ export default {
   },
   beforeMount() {
     this.type = useSubjectList().type;
-    this.limit = Number(this.$route.query.limit) || 10;
-    this.offset = Number(this.$route.query.offset) || 0;
+    this.limit = Number(this.$route.query.limit) || this.pageSize;
+    this.offset = Number(this.$route.query.offset) || this.pageCurr;
+    this.keyword = this.$route.query.keyword || this.keyword;
+    this.sort = this.$route.query.sort || this.sort;
+    this.dateStart = this.$route.query.dateStart || this.dateStart;
+    this.dateEnd = this.$route.query.dateEnd || this.dateEnd;
     this.fetchData();
   }
 }
 </script>
 
 <style scoped>
-
+.ivu-form-item{
+  margin-bottom: 8px;
+}
 </style>

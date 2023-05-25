@@ -18,16 +18,16 @@
             <Text
                 ellipsis
                 style="position: absolute;
-              bottom: 1px;
-              left: 1px;
-              right: 1px;
+              bottom: 0;
+              left: 0;
+              right: 0;
               height: 30px;
               line-height: 30px;
               z-index: 1;
               color: #eee;
               font-size: 12px;
               font-weight: bold;
-              background-color: rgba(0, 0, 0, 0.7);
+              background-color: rgba(0, 0, 0, 0.3);
               text-align: right;
               padding-right: 8px"
             >
