@@ -144,6 +144,7 @@
 </template>
 
 <script>
+import {usePageHeader} from "@/stores/page-header";
 import {
   Card,
   Text,
@@ -181,6 +182,10 @@ export default {
     },
   },
   async beforeMount() {
+    usePageHeader().set({
+      show: false,
+      title: '',
+    });
     await this.initData();
   },
   methods: {

@@ -1,7 +1,7 @@
 <template>
   <PageHeader back hidden-breadcrumb @on-back="this.$router.go(-1)">
     <template #title>
-      <Text>{{ info.platform }} {{ info.name }}</Text> <Text type="secondary">{{ info.name_cn }}</Text>
+      <Text ellipsis :ellipsisConfig="{rows: 1, tooltip: true}">{{ info.platform }} {{ info.name }} <Text type="secondary">{{ info.name_cn }}</Text></Text>
     </template>
   </PageHeader>
   <Row>
@@ -190,6 +190,7 @@
 </template>
 
 <script>
+import {usePageHeader} from "@/stores/page-header";
 import {
   Card,
   Text,
@@ -226,6 +227,10 @@ export default {
     },
   },
   async beforeMount() {
+    usePageHeader().set({
+      show: false,
+      title: '',
+    });
     await this.initData();
   },
   methods: {
@@ -238,7 +243,7 @@ export default {
       this.persons = await this.$common.getSubjectPersons(this.subjectId);
       this.spinShow = false;
     }
-  }
+  },
 }
 </script>
 

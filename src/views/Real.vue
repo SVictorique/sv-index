@@ -1,10 +1,24 @@
 <template>
-
+  <SubjectList></SubjectList>
 </template>
 
 <script>
+import SubjectList from "@/components/SubjectList.vue";
+import {usePageHeader} from "@/stores/page-header";
+import {useSubjectList} from "@/stores/subject-list";
+
 export default {
-  name: "Real"
+  name: "RealView",
+  components: {SubjectList},
+  beforeMount() {
+    usePageHeader().set({
+      show: true,
+      title: '三次元',
+    });
+    useSubjectList().set({
+      type: 6,
+    });
+  }
 }
 </script>
 

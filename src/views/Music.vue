@@ -1,10 +1,24 @@
 <template>
-
+  <SubjectList></SubjectList>
 </template>
 
 <script>
+import SubjectList from "@/components/SubjectList.vue";
+import {usePageHeader} from "@/stores/page-header";
+import {useSubjectList} from "@/stores/subject-list";
+
 export default {
-  name: "Music"
+  name: "MusicView",
+  components: {SubjectList},
+  beforeMount() {
+    usePageHeader().set({
+      show: true,
+      title: '音乐',
+    });
+    useSubjectList().set({
+      type: 3,
+    });
+  }
 }
 </script>
 

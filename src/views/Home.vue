@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import {usePageHeader} from "@/stores/page-header";
 import {Card, Link} from "view-ui-plus";
 export default {
   name: 'home-view',
@@ -109,6 +110,10 @@ export default {
     },
   },
   async beforeMount() {
+    usePageHeader().set({
+      show: false,
+      title: '',
+    });
     for (const subject of this.subjects) {
       subject.data = await this.fetchTopData(subject.type);
     }

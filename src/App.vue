@@ -7,7 +7,7 @@
           <h2 class="layout-title" @click="this.$router.push(`/`)" style="cursor: pointer">银小维 Anime</h2>
         </div>
         <div class="layout-dropdown">
-          <Dropdown>
+          <Dropdown trigger="click">
             <Button type="default">菜单</Button>
             <template #list>
               <DropdownMenu>
@@ -31,6 +31,7 @@
         </div>
       </Menu>
     </Header>
+    <PageHeader v-show="pageHeader.show" :title="pageHeader.title" back hidden-breadcrumb @on-back="this.$router.go(-1)"></PageHeader>
     <Content :style="{ height: 'calc(100vh - 64px)', overflow: 'auto' }">
       <RouterView/>
       <GlobalFooter :links="links" :copyright="copyright" class="footer"/>
@@ -40,12 +41,14 @@
 
 <script>
 import {Button, Dropdown, DropdownItem, DropdownMenu, GlobalFooter, Menu, MenuItem} from "view-ui-plus";
+import {usePageHeader} from "@/stores/page-header";
 export default {
   name: 'App',
   components: {GlobalFooter, DropdownItem, DropdownMenu, Button, Dropdown, MenuItem, Menu},
   data() {
     return {
       baseUrl: import.meta.env.BASE_URL,
+      pageHeader: usePageHeader(),
       links: [{
         href: 'https://github.com/SVictorique/sv-anime',
         blankTarget: true,

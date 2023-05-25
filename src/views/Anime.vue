@@ -85,9 +85,9 @@
                   </template>
                   <Image
                       :src="
-                  row.coverImgUrl ||
-                  'https://lain.bgm.tv/img/no_icon_subject.png'
-                "
+                row.coverImgUrl ||
+                'https://lain.bgm.tv/img/no_icon_subject.png'
+              "
                       fit="cover"
                       :alt="row.title"
                       style="width: 100%"
@@ -105,7 +105,7 @@
                   </Text>
                 </Poptip>
               </Col>
-              <Col :xs="24" :sm="24" :md="24" :xl="16">
+              <Col :xs="24" :sm="24" :md="24" :xxl="16">
                 <Text
                     type="success"
                     @click="goSubject(row.subjectId)"
@@ -188,6 +188,7 @@
 <script>
 import AnimeCalendar from "@/components/AnimeCalendar.vue";
 import {TabPane, Tooltip} from 'view-ui-plus';
+import {usePageHeader} from "@/stores/page-header";
 
 export default {
   name: 'anime-view',
@@ -304,6 +305,11 @@ export default {
     },
   },
   async beforeMount() {
+    usePageHeader().set({
+      show: true,
+      title: '动画',
+    });
+
     this.pageSize = Number(this.$route.query.size) || this.pageSize;
     this.pageCurr = Number(this.$route.query.num) || this.pageCurr;
     this.search = this.$route.query.search;
