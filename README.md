@@ -2,6 +2,9 @@
 
 This template should help get you started developing with Vue 3 in Vite.
 
+## Website
+[https://svictorique.github.io/sv-anime/#/](https://svictorique.github.io/sv-anime/)
+
 ## Data Provider
 
 - https://github.com/bangumi-data/bangumi-data
