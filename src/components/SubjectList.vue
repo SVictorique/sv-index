@@ -2,11 +2,15 @@
   <Card>
     <Form inline label-position="right" :label-width="100">
       <FormItem label="关键字">
-        <Input v-model="keyword" placeholder="Keyword" class="ivu-fr" style="width: 200px" clearable>
-          <template #suffix>
-            <Icon type="ios-search" />
-          </template>
-        </Input>
+        <Input
+            v-model="keyword"
+            placeholder="Keyword"
+            clearable
+            style="width: calc(100% - 60px)"
+            @on-clear="filterChange"
+            @on-enter="filterChange"
+        ></Input>
+        <Button type="primary" @click="filterChange">搜索</Button>
       </FormItem>
       <FormItem label="排序">
         <Select v-model="sort" @on-change="filterChange">
@@ -22,6 +26,7 @@
             v-model="dateStart"
             placeholder="Date Start"
             style="width: 200px"
+            :options="dateStartOption"
             @on-change="filterChange"
         />
         <DatePicker
@@ -30,6 +35,7 @@
             v-model="dateEnd"
             placeholder="Date End"
             style="width: 200px"
+            :options="dateEndOption"
             @on-change="filterChange"
         />
       </FormItem>
@@ -101,20 +107,21 @@
         :page-size="pageSize"
         show-sizer
         show-elevator
-        @on-change="filterChange"
-        @on-page-size-change="filterChange"
+        @on-change="pageChange"
+        @on-page-size-change="pageChange"
     />
   </Card>
 </template>
 
 <script>
 import {useSubjectList} from "@/stores/subject-list";
-import {FormItem, Option, Select} from "view-ui-plus";
+import {FormItem, Option, Select, Button} from "view-ui-plus";
 
 export default {
   name: "SubjectList",
-  components: {FormItem, Option, Select},
+  components: {Button, FormItem, Option, Select},
   data() {
+    const that = this;
     return {
       type: 2,
       listData: [],
@@ -123,9 +130,19 @@ export default {
       total: 0,
       keyword: '',
       sort: 'heat',// score|heat|rank
-      dateStart: '',
-      dateEnd: '',
+      dateStart: null,
+      dateEnd: null,
       spinShow: false,
+      dateStartOption: {
+        disabledDate (date) {
+          return date && that.dateEnd && date.valueOf() > that.dateEnd;
+        }
+      },
+      dateEndOption: {
+        disabledDate (date) {
+          return date && that.dateStart && date.valueOf() < that.dateStart;
+        }
+      }
     };
   },
   watch: {
@@ -135,11 +152,19 @@ export default {
     }
   },
   methods: {
-    filterChange() {
+    pageChange() {
       this.$router.push({
         query: Object.assign({}, this.$route.query, {
           size: this.pageSize,
           num: this.pageCurr,
+        })
+      })
+    },
+    filterChange() {
+      this.$router.push({
+        query: Object.assign({}, this.$route.query, {
+          size: this.pageSize,
+          num: 1,
           keyword: this.keyword,
           sort: this.sort,
           dateStart: this.dateStart ? this.$Date(this.dateStart).format('YYYY-MM-DD') : '',
@@ -159,11 +184,11 @@ export default {
       fetch(`${this.$common.bgmApiRoot}/v0/search/subjects?limit=${this.pageSize}&offset=${(this.pageCurr - 1) * this.pageSize}`, {
         method: 'post',
         body: JSON.stringify({
+          keyword: this.keyword,
           sort: this.sort,
           filter: {
             type: [this.type],
             NSFW: true,
-            keyword: this.keyword,
             air_date: airDate,
             tag: [],
             rating: [],
