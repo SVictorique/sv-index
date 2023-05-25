@@ -32,6 +32,7 @@ const getCacheData = async (key, id, url) => {
 };
 
 export const common = reactive({
+  bgmApiRoot,
   async getSubjectInfo(id) {
     return getCacheData('sv-anime-subject', id, `${bgmApiRoot}/v0/subjects/${id}`);
   },

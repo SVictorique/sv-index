@@ -8,6 +8,7 @@ import Real from "@/views/Real.vue";
 import Subject from "@/components/Subject.vue";
 import Character from "@/components/Character.vue";
 import Person from "@/components/Person.vue";
+import About from "@/views/About.vue";
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -59,6 +60,11 @@ const router = createRouter({
       name: 'person',
       component: Person,
       props: true,
+    },
+    {
+      path: '/about',
+      name: 'about',
+      component: About,
     }
   ]
 })
