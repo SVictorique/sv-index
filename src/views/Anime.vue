@@ -182,17 +182,22 @@
         />
       </Card>
     </TabPane>
+    <TabPane label="bgm动画">
+      <SubjectList></SubjectList>
+    </TabPane>
   </Tabs>
 </template>
 
 <script>
 import AnimeCalendar from "@/components/AnimeCalendar.vue";
+import SubjectList from "@/components/SubjectList.vue";
+import {useSubjectList} from "@/stores/subject-list";
 import {TabPane, Tooltip} from 'view-ui-plus';
 import {usePageHeader} from "@/stores/page-header";
 
 export default {
   name: 'anime-view',
-  components: {AnimeCalendar, TabPane, Tooltip },
+  components: {SubjectList, AnimeCalendar, TabPane, Tooltip },
   data() {
     return {
       tagName: 0,
@@ -308,6 +313,9 @@ export default {
     usePageHeader().set({
       show: true,
       title: '动画',
+    });
+    useSubjectList().set({
+      type: 2,
     });
 
     this.pageSize = Number(this.$route.query.size) || this.pageSize;

@@ -50,3 +50,7 @@ body {
 .page-container {
     margin-top: 56px
 }
+
+#app .ivu-global-footer {
+    margin: 24px 0;
+}

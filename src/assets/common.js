@@ -70,5 +70,19 @@ export const common = reactive({
   },
   async getCalendar() {
     return getCacheData('sv-anime-calendar', 'default', `${bgmApiRoot}/calendar`);
+  },
+  getCurSeason() {
+    const date = new Date();
+    let month;
+    if (date.getMonth() < 4) {
+      month = '01';
+    } else if (date.getMonth() < 7) {
+      month = '04';
+    } else if (date.getMonth() < 10) {
+      month = '07';
+    } else {
+      month = '10';
+    }
+    return `${date.getFullYear()}-${month}-01`;
   }
 });

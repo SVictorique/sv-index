@@ -13,7 +13,7 @@
         <Button type="primary" @click="filterChange">搜索</Button>
       </FormItem>
       <FormItem label="排序">
-        <Select v-model="sort" @on-change="filterChange">
+        <Select v-model="sort" @on-change="filterChange" clearable>
           <Option value="heat">热度</Option>
           <Option value="score">评分</Option>
           <Option value="rank">排名</Option>
@@ -129,7 +129,7 @@ export default {
       pageCurr: 1,
       total: 0,
       keyword: '',
-      sort: 'heat',// score|heat|rank
+      sort: 'heat',
       dateStart: null,
       dateEnd: null,
       spinShow: false,
@@ -181,6 +181,10 @@ export default {
       if (this.dateEnd) {
         airDate.push(`<=${this.$Date(this.dateEnd).format('YYYY-MM-DD')}`);
       }
+      const rank = [];
+      if (this.sort === 'rank') {
+        rank.push('>0')
+      }
       fetch(`${this.$common.bgmApiRoot}/v0/search/subjects?limit=${this.pageSize}&offset=${(this.pageCurr - 1) * this.pageSize}`, {
         method: 'post',
         body: JSON.stringify({
@@ -192,7 +196,7 @@ export default {
             air_date: airDate,
             tag: [],
             rating: [],
-            rank: [],
+            rank: rank,
           },
         })
       })
@@ -210,7 +214,7 @@ export default {
     this.offset = Number(this.$route.query.offset) || this.pageCurr;
     this.keyword = this.$route.query.keyword || this.keyword;
     this.sort = this.$route.query.sort || this.sort;
-    this.dateStart = this.$route.query.dateStart || this.dateStart;
+    this.dateStart = this.$route.query.dateStart || this.$common.getCurSeason();
     this.dateEnd = this.$route.query.dateEnd || this.dateEnd;
     this.fetchData();
   }

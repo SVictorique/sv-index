@@ -82,17 +82,6 @@ export default {
   },
   methods: {
     async fetchTopData(type) {
-      const date = new Date();
-      let month;
-      if (date.getMonth() < 4) {
-        month = '01';
-      } else if (date.getMonth() < 7) {
-        month = '04';
-      } else if (date.getMonth() < 10) {
-        month = '07';
-      } else {
-        month = '10';
-      }
       const res = await fetch(`${this.$common.bgmApiRoot}/v0/search/subjects?limit=8`, {
         method: 'post',
         body: JSON.stringify({
@@ -101,7 +90,7 @@ export default {
             type: [type],
             NSFW: true,
             air_date: [
-              `>=${date.getFullYear()}-${month}-01`,
+              `>=${this.$common.getCurSeason()}`,
             ]
           },
         })
