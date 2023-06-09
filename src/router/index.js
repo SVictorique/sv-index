@@ -1,3 +1,4 @@
+import Anime1Detail from "@/views/Anime1Detail.vue";
 import { createRouter, createWebHashHistory } from 'vue-router';
 import Home from '@/views/Home.vue';
 import Anime from "@/views/Anime.vue";
@@ -65,6 +66,11 @@ const router = createRouter({
       path: '/about',
       name: 'about',
       component: About,
+    },
+    {
+      path: '/anime1/detail',
+      name: 'anime1Detail',
+      component: Anime1Detail,
     }
   ]
 })
