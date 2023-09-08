@@ -84,5 +84,8 @@ export const common = reactive({
       month = '10';
     }
     return `${date.getFullYear()}-${month}-01`;
+  },
+  async getAnime1Data() {
+    return getCacheData('sv-anime-anime1', 'default', 'https://d1zquzjgwo9yb.cloudfront.net')
   }
 });
