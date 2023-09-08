@@ -1,4 +1,5 @@
 import Anime1Detail from "@/views/Anime1Detail.vue";
+import Video from "@/views/Video.vue";
 import { createRouter, createWebHashHistory } from 'vue-router';
 import Home from '@/views/Home.vue';
 import Anime from "@/views/Anime.vue";
@@ -71,6 +72,11 @@ const router = createRouter({
       path: '/anime1/detail',
       name: 'anime1Detail',
       component: Anime1Detail,
+    },
+    {
+      path: '/video',
+      name: 'video',
+      component: Video,
     }
   ]
 })

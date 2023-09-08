@@ -16,10 +16,10 @@
 </template>
 
 <script>
-import {Space} from "view-ui-plus";
+import {Card, Page, Space} from "view-ui-plus";
 export default {
   name: "Anime1List",
-  components: {Space},
+  components: {Page, Card, Space},
   data() {
     return {
       baseUrl: import.meta.env.BASE_URL,

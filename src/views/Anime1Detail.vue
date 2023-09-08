@@ -1,5 +1,5 @@
 <template>
-  <button v-for="i in data.eps" :key="i">
+  <button v-for="i in parseEps(data.eps)" :key="i" @click="open(`https://miru.v.anime1.me/${id}/${index}b.mp4`)">
     {{ i }}
   </button>
 </template>
@@ -14,6 +14,7 @@ export default {
       baseUrl: import.meta.env.BASE_URL,
       id: null,
       data: {},
+      index: 1,
     };
   },
   beforeMount() {
@@ -22,8 +23,8 @@ export default {
     fetch(`${this.baseUrl}/anime1-data.json`)
         .then(d => d.json())
         .then(d => {
-          this.data = d.find(d => d.id == this.id)
-
+          this.data = d.find(d => d.id === Number(this.id))
+          console.log(this.data)
           usePageHeader().set({
             show: true,
             title: this.data.name,
@@ -32,11 +33,17 @@ export default {
   },
   methods: {
     parseEps(eps) {
+      if (!eps) {
+        return 0
+      }
       if (eps.indexOf('(') !== -1) {
         return Number(eps.substring(eps.indexOf('(') + 1, eps.indexOf(')')))
       } else {
-        return Number(eps.substring())
+        return Number(eps.substring(eps.indexOf('-') +1, eps.length))
       }
+    },
+    open(url) {
+      window.open(url, '_blank')
     }
   },
 }
