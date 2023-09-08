@@ -13,6 +13,7 @@ export default {
       pageCurr: 1,
       spinShow: false,
       total: 0,
+      baseUrl: import.meta.env.BASE_URL,
     }
   },
   watch: {
@@ -53,7 +54,7 @@ export default {
             this.spinShow = false;
 
             for (const d of this.originData) {
-              d.cover_url = `/iqiyi${d.image_url_normal.substring(d.image_url_normal.indexOf("/image/"))}`
+              d.cover_url = `${this.baseUrl}/iqiyi${d.image_url_normal.substring(d.image_url_normal.indexOf("/image/"))}`
             }
 
             this.listData = this.originData.slice(
