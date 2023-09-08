@@ -27,6 +27,7 @@
           <MenuItem name="music" to="/music">音乐</MenuItem>
           <MenuItem name="game" to="/game">游戏</MenuItem>
           <MenuItem name="real" to="/real">三次元</MenuItem>
+          <MenuItem name="video" to="/video">电视剧</MenuItem>
           <MenuItem name="about" to="/about">关于</MenuItem>
         </div>
       </Menu>
