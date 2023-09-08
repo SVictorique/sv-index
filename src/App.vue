@@ -125,4 +125,7 @@ export default {
   width: auto;
   display: inline-block;
 }
+.ivu-image-error{
+  position: relative;
+}
 </style>

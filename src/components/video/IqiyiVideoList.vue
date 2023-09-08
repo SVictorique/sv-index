@@ -1,10 +1,10 @@
 <script>
 import {useSubjectList} from "@/stores/subject-list";
-import {Image} from "view-ui-plus";
+import {Image, List, ListItem, Text} from "view-ui-plus";
 
 export default {
   name: "IqiyiVideoList",
-  components: {Image},
+  components: {Text, ListItem, List, Image},
   data() {
     return {
       listData: [],
@@ -63,6 +63,16 @@ export default {
             )
           });
     },
+    openPage(url) {
+      window.open(url)
+    },
+    fetchPersonInfo(id) {
+      fetch(`https://pcw-api.iqiyi.com/strategy/pcw/data/playQiguanRightSide?entity_id=${id}`)
+          .then(res => res.json())
+          .then(res => {
+            console.log(res)
+          })
+    },
   },
   beforeMount() {
     this.type = useSubjectList().type;
@@ -94,10 +104,10 @@ export default {
           <p v-line-clamp="1" style="word-break: break-all">
             {{ row.title }}
           </p>
-          <Text type="secondary">{{ row.tag_pcw }}</Text>
+          <Text type="secondary">{{ row.desc }}</Text>
         </template>
         <Row :gutter="24">
-          <Col :xs="24" :sm="24" :md="24" :xxl="8" @click="window.open(row.page_url)" style="cursor: pointer">
+          <Col :xs="24" :sm="24" :md="24" :xxl="8" @click="openPage(row.page_url)" style="cursor: pointer">
             <Image
                 :src="
                 row.cover_url ||
@@ -108,13 +118,19 @@ export default {
                 style="width: 100%"
             >
               <template #error>
-                <Icon type="ios-image-outline" size="24" />
+                <Image
+                    src="https://lain.bgm.tv/img/no_icon_subject.png"
+                    fit="cover"
+                    :alt="row.title"
+                    style="width: 100%"
+                >
+                </Image>
               </template>
             </Image>
             <Text
                 style="position: absolute; bottom: 0px; left: 12px; right: 12px; height: 30px; line-height: 30px; z-index: 1; color: #fff; font-size: 14px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); text-align: right;"
             >
-              <span style="position: absolute; left: 5px">排名：{{ row.rank_order || '无' }}</span>
+              <span style="position: absolute; left: 5px">{{ row.dq_updatestatus || '无' }}</span>
               <span style="position: absolute; right: 5px">热度：{{ row.hot_score || '无' }}</span>
             </Text>
           </Col>
@@ -122,8 +138,16 @@ export default {
             <p style="margin-top: 8px;">
               <Text>上映时间：{{ row.showDate }}</Text>
             </p>
+            <div style="margin-top: 8px">
+              <span v-for="(item, index) in row.contributor" :key="item.id">
+                <Link @click="fetchPersonInfo(item.id)" style="width: auto; display: inline-block">
+                  {{ item.name }}
+                </Link>
+                <Text v-if="index < row.contributor.length - 1"> / </Text>
+              </span>
+            </div>
             <div v-if="row.description" style="margin-top: 8px">
-              <Paragraph type="secondary" ellipsis :ellipsisConfig="{tooltip: true, rows: 6}">{{ row.summary }}</Paragraph>
+              <Paragraph type="secondary" ellipsis :ellipsisConfig="{tooltip: false, rows: 6}">{{ row.description }}</Paragraph>
             </div>
             <div v-else>
               <Text type="secondary">暂无说明</Text>

@@ -93,6 +93,9 @@ export default {
             this.spinShow = false;
           });
     },
+    openPage(cid) {
+      window.open(`https://v.qq.com/x/cover/${cid}.html`)
+    },
   },
   beforeMount() {
     this.type = useSubjectList().type;
@@ -116,7 +119,7 @@ export default {
         :sm="12"
         :md="8"
         :xl="6"
-        :xxl="8"
+        :xxl="4"
         style="margin: 12px 0"
     >
       <Card style="height: 100%;">
@@ -127,7 +130,7 @@ export default {
           <Text type="secondary">{{ row.second_title }}</Text>
         </template>
         <Row :gutter="24">
-          <Col :xs="24" :sm="24" :md="24" :xxl="8" @click="window.open(row.page_url)" style="cursor: pointer">
+          <Col :xs="24" :sm="24" :md="24" @click="openPage(row.cid)" style="cursor: pointer">
             <Image
                 :src="
                 row.new_pic_vt ||
@@ -147,7 +150,7 @@ export default {
               <span style="position: absolute; left: 5px">{{ row.timelong }}</span>
             </Text>
           </Col>
-          <Col :xs="24" :sm="24" :md="24" :xxl="16">
+          <Col :xs="24" :sm="24" :md="24">
             <p style="margin-top: 8px;">
               <Text>上映时间：{{ row.publish_date }}</Text>
             </p>
