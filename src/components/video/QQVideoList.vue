@@ -154,12 +154,6 @@ export default {
             <p style="margin-top: 8px;">
               <Text>上映时间：{{ row.publish_date }}</Text>
             </p>
-            <div v-if="row.description" style="margin-top: 8px">
-              <Paragraph type="secondary" ellipsis :ellipsisConfig="{tooltip: true, rows: 6}">{{ row.summary }}</Paragraph>
-            </div>
-            <div v-else>
-              <Text type="secondary">暂无说明</Text>
-            </div>
           </Col>
         </Row>
       </Card>

@@ -1,4 +1,5 @@
 <script>
+import MgtvVideoList from "@/components/video/MgtvVideoList.vue";
 import QQVideoList from "@/components/video/QQVideoList.vue";
 import YoukuVideoList from "@/components/video/YoukuVideoList.vue";
 import {TabPane, Tabs} from "view-ui-plus";
@@ -6,7 +7,7 @@ import IqiyiVideoList from "@/components/video/IqiyiVideoList.vue";
 
 export default {
   name: 'VideoList',
-  components: {YoukuVideoList, QQVideoList, Tabs, TabPane, IqiyiVideoList},
+  components: {MgtvVideoList, YoukuVideoList, QQVideoList, Tabs, TabPane, IqiyiVideoList},
   data() {
     return {
       tagName: 0
@@ -60,6 +61,11 @@ export default {
   <TabPane label="优酷">
     <div v-show="tagName === 2">
       <YoukuVideoList/>
+    </div>
+  </TabPane>
+  <TabPane label="芒果">
+    <div v-show="tagName === 3">
+      <MgtvVideoList/>
     </div>
   </TabPane>
 </Tabs>
