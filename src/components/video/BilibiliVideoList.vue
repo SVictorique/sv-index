@@ -3,7 +3,7 @@ import {useSubjectList} from "@/stores/subject-list";
 import {Image} from "view-ui-plus";
 
 export default {
-  name: "IqiyiVideoList",
+  name: "MgtvVideoList",
   components: {Image},
   data() {
     return {
@@ -33,57 +33,14 @@ export default {
     },
     fetchData() {
       this.spinShow = true;
-      fetch(`https://pbaccess.video.qq.com/trpc.vector_layout.page_view.PageService/getPage?video_appid=3000010`, {
-        method: 'post',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          "page_context": {
-            "page_index": String(this.pageCurr-1)
-          },
-          "page_params": {
-            "page_id": "channel_list_second_page",
-            "page_type": "operation",
-            "channel_id": "100113",
-            "filter_params": "ifeature=-1&iarea=-1&iyear=-1&ipay=-1&sort=79",
-            "page": String(this.pageCurr-1)
-          },
-          "page_bypass_params": {
-            "params": {
-              "page_id": "channel_list_second_page",
-              "page_type": "operation",
-              "channel_id": "100113",
-              "filter_params": "ifeature=-1&iarea=-1&iyear=-1&ipay=-1&sort=79",
-              "page": String(this.pageCurr-1),
-              "caller_id": "3000010",
-              "platform_id": "2",
-              "data_mode": "default",
-              "user_mode": "default"
-            },
-            "scene": "operation",
-            "abtest_bypass_id": "7ea5673d46432814"
-          }
-        })
-      })
+      fetch(`https://api.bilibili.com/pgc/season/index/result?area=-1&style_id=-1&release_date=-1&season_status=-1&order=0&st=5&sort=0&page=${this.pageCurr}&season_type=5&pagesize=${this.pageSize}&type=1`)
           .then(d => d.json())
           .then(res => {
-            let cardList = null;
-            if (res.data.CardList.length === 2) {
-              cardList = res.data.CardList[1];
-            } else {
-              cardList = res.data.CardList[0];
-            }
-            this.total = Number(cardList.params.total_video);
-            this.listData = [];
-            for (const card of cardList.children_list.list.cards) {
-              this.listData.push(card.params)
-            }
+            this.total = res.data.total
+
+            this.listData = res.data.list;
             this.spinShow = false;
           });
-    },
-    openPage(cid) {
-      window.open(`https://v.qq.com/x/cover/${cid}.html`)
     },
   },
   beforeMount() {
@@ -116,13 +73,13 @@ export default {
           <p v-line-clamp="1" style="word-break: break-all">
             {{ row.title }}
           </p>
-          <Text type="secondary">{{ row.second_title }}</Text>
+          <Text type="secondary">{{ row.subTitle }}</Text>
         </template>
         <Row :gutter="24">
-          <Col :xs="24" :sm="24" :md="24" @click="openPage(row.cid)" style="cursor: pointer">
+          <Col :xs="24" :sm="24" :md="24" @click="openPage(row.clipId)" style="cursor: pointer">
             <Image
                 :src="
-                row.new_pic_vt ||
+                row.cover ||
                 'https://lain.bgm.tv/img/no_icon_subject.png'
               "
                 fit="cover"
@@ -136,13 +93,20 @@ export default {
             <Text
                 style="position: absolute; bottom: 0px; left: 12px; right: 12px; height: 30px; line-height: 30px; z-index: 1; color: #fff; font-size: 14px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); text-align: right;"
             >
-              <span style="position: absolute; left: 5px">{{ row.timelong }}</span>
+              <span style="position: absolute; left: 5px">{{ row.index_show }}</span>
+              <span style="position: absolute; right: 5px">评分：{{ row.score || '无' }}</span>
             </Text>
           </Col>
           <Col :xs="24" :sm="24" :md="24">
             <p style="margin-top: 8px;">
-              <Text>上映时间：{{ row.publish_date }}</Text>
+              <Text>更新事件：{{ row.order }}</Text>
             </p>
+<!--            <div v-if="row.story" style="margin-top: 8px">
+              <Paragraph type="secondary" ellipsis :ellipsisConfig="{tooltip: true, rows: 6}">{{ row.story }}</Paragraph>
+            </div>
+            <div v-else>
+              <Text type="secondary">暂无说明</Text>
+            </div>-->
           </Col>
         </Row>
       </Card>

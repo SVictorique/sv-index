@@ -4,10 +4,11 @@ import QQVideoList from "@/components/video/QQVideoList.vue";
 import YoukuVideoList from "@/components/video/YoukuVideoList.vue";
 import {TabPane, Tabs} from "view-ui-plus";
 import IqiyiVideoList from "@/components/video/IqiyiVideoList.vue";
+import BilibiliVideoList from "@/components/video/BilibiliVideoList.vue";
 
 export default {
   name: 'VideoList',
-  components: {MgtvVideoList, YoukuVideoList, QQVideoList, Tabs, TabPane, IqiyiVideoList},
+  components: {MgtvVideoList, YoukuVideoList, QQVideoList, Tabs, TabPane, IqiyiVideoList, BilibiliVideoList},
   data() {
     return {
       tagName: 0
@@ -66,6 +67,11 @@ export default {
   <TabPane label="芒果">
     <div v-show="tagName === 3">
       <MgtvVideoList/>
+    </div>
+  </TabPane>
+  <TabPane label="Bilibili">
+    <div v-show="tagName === 4">
+      <BilibiliVideoList/>
     </div>
   </TabPane>
 </Tabs>
