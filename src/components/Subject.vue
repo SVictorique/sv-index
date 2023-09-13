@@ -226,7 +226,7 @@ export default {
       this.initData();
     },
   },
-  async beforeMount() {
+  async created() {
     usePageHeader().set({
       show: false,
       title: '',

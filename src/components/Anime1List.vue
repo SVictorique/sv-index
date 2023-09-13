@@ -63,7 +63,7 @@ export default {
       keyword: '',
     };
   },
-  beforeMount() {
+  created() {
     this.pageSize = Number(this.$route.query.size) || this.pageSize;
     this.pageCurr = Number(this.$route.query.num) || this.pageCurr;
     this.search = this.$route.query.search;

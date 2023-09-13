@@ -10,7 +10,7 @@ import {useSubjectList} from "@/stores/subject-list";
 export default {
   name: "RealView",
   components: {SubjectList},
-  beforeMount() {
+  created() {
     usePageHeader().set({
       show: true,
       title: '三次元',

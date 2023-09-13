@@ -208,7 +208,7 @@ export default {
           });
     },
   },
-  beforeMount() {
+  created() {
     this.type = useSubjectList().type;
     this.limit = Number(this.$route.query.limit) || this.pageSize;
     this.offset = Number(this.$route.query.offset) || this.pageCurr;

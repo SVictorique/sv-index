@@ -3,7 +3,7 @@ import {useSubjectList} from "@/stores/subject-list";
 import {Image} from "view-ui-plus";
 
 export default {
-  name: "MgtvVideoList",
+  name: "BilibiliVideoList",
   components: {Image},
   data() {
     return {
@@ -46,7 +46,7 @@ export default {
       window.open(url)
     }
   },
-  beforeMount() {
+  created() {
     this.type = useSubjectList().type;
     this.limit = Number(this.$route.query.limit) || this.pageSize;
     this.offset = Number(this.$route.query.offset) || this.pageCurr;
@@ -79,7 +79,7 @@ export default {
           <Text type="secondary">{{ row.subTitle }}</Text>
         </template>
         <Row :gutter="24">
-          <Col :xs="24" :sm="24" :md="24" @click="openPage(link)" style="cursor: pointer">
+          <Col :xs="24" :sm="24" :md="24" @click="openPage(row.link)" style="cursor: pointer">
             <Image
                 :src="
                 `${this.baseUrl}/bilibili/${row.cover.substring(row.cover.lastIndexOf('/') + 1)}` ||

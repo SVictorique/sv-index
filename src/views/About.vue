@@ -45,7 +45,7 @@ import {Link, Paragraph, Title} from "view-ui-plus";
 export default {
   name: "AboutView",
   components: {Link, Paragraph, Title},
-  beforeMount() {
+  created() {
     usePageHeader().set({
       show: true,
       title: '关于',

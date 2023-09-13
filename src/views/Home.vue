@@ -98,7 +98,7 @@ export default {
       return res.data;
     },
   },
-  async beforeMount() {
+  async created() {
     usePageHeader().set({
       show: false,
       title: '',

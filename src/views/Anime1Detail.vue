@@ -17,7 +17,7 @@ export default {
       index: 1,
     };
   },
-  beforeMount() {
+  created() {
     this.id = this.$route.query.id
 
     fetch(`${this.baseUrl}/anime1-data.json`)

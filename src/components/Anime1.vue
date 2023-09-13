@@ -30,7 +30,7 @@ export default {
       tableData: [],
     };
   },
-  async beforeMount() {
+  async created() {
     this.tableData = (await this.$common.getAnime1Data())
         .map(d => ({
           id: d[0],

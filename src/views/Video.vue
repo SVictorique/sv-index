@@ -28,11 +28,12 @@ export default {
       this.$router.push({
         query: Object.assign({}, this.$route.query, {
           tagName: this.tagName,
+          num: 1,
         })
       })
     },
   },
-  beforeMount() {
+  created() {
     if (this.$route.query.tagName) {
       this.tagName = Number(this.$route.query.tagName)
     } else {
@@ -50,27 +51,27 @@ export default {
 <template>
 <Tabs v-model="tagName" @on-click="tabChange">
   <TabPane label="爱奇艺">
-    <div v-show="tagName === 0">
+    <div v-if="tagName === 0">
       <IqiyiVideoList/>
     </div>
   </TabPane>
   <TabPane label="腾讯">
-    <div v-show="tagName === 1">
+    <div v-if="tagName === 1">
       <QQVideoList/>
     </div>
   </TabPane>
   <TabPane label="优酷">
-    <div v-show="tagName === 2">
+    <div v-if="tagName === 2">
       <YoukuVideoList/>
     </div>
   </TabPane>
   <TabPane label="芒果">
-    <div v-show="tagName === 3">
+    <div v-if="tagName === 3">
       <MgtvVideoList/>
     </div>
   </TabPane>
   <TabPane label="Bilibili">
-    <div v-show="tagName === 4">
+    <div v-if="tagName === 4">
       <BilibiliVideoList/>
     </div>
   </TabPane>

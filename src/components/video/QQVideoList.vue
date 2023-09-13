@@ -86,7 +86,7 @@ export default {
       window.open(`https://v.qq.com/x/cover/${cid}.html`)
     },
   },
-  beforeMount() {
+  created() {
     this.type = useSubjectList().type;
     this.limit = Number(this.$route.query.limit) || this.pageSize;
     this.offset = Number(this.$route.query.offset) || this.pageCurr;

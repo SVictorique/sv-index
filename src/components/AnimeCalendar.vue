@@ -57,7 +57,7 @@ export default {
   methods: {
 
   },
-  async beforeMount() {
+  async created() {
     this.calendarData = [];
     for (let i = 0; i < 7; i++) {
       this.calendarData.push([]);
