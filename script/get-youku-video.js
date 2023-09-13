@@ -23,7 +23,7 @@ const run = async () => {
   const videoInfos = await getVideoInfos(selector, page);
   console.log(videoInfos);
   const rootPath = path.resolve(__dirname);
-  fs.writeFileSync(path.join(rootPath, "../public/youku/video-data.json"), JSON.stringify(videoInfos));
+  fs.writeFileSync("/public/youku/video-data.json", JSON.stringify(videoInfos));
 
   await browser.close();
 }
