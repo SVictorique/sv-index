@@ -31,11 +31,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: install puppeteer
-        uses: tj-actions/puppeteer@v4.1.0
-        with:
-          # Files to run
-          files: script/get-youku-video.js
       - name: Vue App to Github Pages
         # You may pin to the exact commit or the version.
         # uses: StruggleYang/VuePagesAction@b1d5654c25f30f4c640cfc20fa7e24e71de7c215
