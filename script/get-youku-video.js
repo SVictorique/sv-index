@@ -12,7 +12,8 @@ const run = async () => {
 
   for (let i=0; i<10; i++) {
     console.info(`scroll ${i}`)
-    await scrollPage(page);
+    const res = await scrollPage(page);
+    console.log(res)
     await new Promise((resolve) => {
       setTimeout(() => resolve(), 1000);
     })
@@ -48,16 +49,19 @@ const getVideoInfos = async (selector) => {
 }
 
 const scrollPage = async (page) => {
-  return page.evaluate(function () {
+  return page.evaluate( () => {
     const container = document.getElementsByClassName("videolist_s_container")[0]
-    for (let y = 0; y <= 100; y++) {
-      container.scrollTo({
-        left: 0,
-        top: container.scrollTop + 1000
-      })
+    if (container) {
+      for (let y = 0; y <= 100; y++) {
+        container.scrollTo({
+          left: 0,
+          top: container.scrollTop + 1000
+        })
+      }
+      return container.scrollHeight
+    } else {
+      return document.body.innerHTML
     }
-    console.log(container.scrollTop)
-    return container.scrollHeight
   })
 }
 
