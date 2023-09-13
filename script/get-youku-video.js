@@ -4,7 +4,7 @@ const path = require("path");
 const run = async () => {
   const url = "https://www.youku.com/channel/webtv/list?filter=type_电视剧_sort_1";
   //await axios.get("https://www.youku.com/channel/webtv/list?filter=type_电视剧_sort_1")
-  const browser = await puppeteer.launch({headless: true});
+  const browser = await puppeteer.launch({headless: 'new'});
   const page = await browser.newPage();
 
   await page.goto(url);
