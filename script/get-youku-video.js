@@ -61,4 +61,4 @@ const scrollPage = async (page) => {
   })
 }
 
-run()
+module.exports = run;

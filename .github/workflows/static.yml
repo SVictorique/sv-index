@@ -32,9 +32,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: install puppeteer
-        uses: maku693/action-puppeteer-script@v0.3.0
+        uses: ianwalter/puppeteer-container@acc52cd2334ad9eaf6e1974562d263e0a711b7e8
         with:
-          script: script/get-youku-video.js
+          args: npm i
       - name: Vue App to Github Pages
         # You may pin to the exact commit or the version.
         # uses: StruggleYang/VuePagesAction@b1d5654c25f30f4c640cfc20fa7e24e71de7c215
