@@ -1,9 +1,10 @@
 const getAnime1Data = require('./script/get-anime1-data');
 const getIqiyiVideoImage = require('./script/get-iqiyi-video-image');
-// const getYoukuVideo = require('./script/get-youku-video');
+const { getAnimes, getEpisode } = require('./script/get-bilibili-video');
 
 getAnime1Data();
 getIqiyiVideoImage();
-// getYoukuVideo();
+getAnimes();
+getEpisode();
 
 

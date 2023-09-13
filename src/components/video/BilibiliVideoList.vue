@@ -33,15 +33,18 @@ export default {
     },
     fetchData() {
       this.spinShow = true;
-      fetch(`https://api.bilibili.com/pgc/season/index/result?area=-1&style_id=-1&release_date=-1&season_status=-1&order=0&st=5&sort=0&page=${this.pageCurr}&season_type=5&pagesize=${this.pageSize}&type=1`)
+      fetch(`${this.baseUrl}/bilibili-episode.json`)
           .then(d => d.json())
           .then(res => {
-            this.total = res.data.total
+            this.total = res.length
 
-            this.listData = res.data.list;
+            this.listData = res;
             this.spinShow = false;
           });
     },
+    openPage(url) {
+      window.open(url)
+    }
   },
   beforeMount() {
     this.type = useSubjectList().type;
@@ -76,10 +79,10 @@ export default {
           <Text type="secondary">{{ row.subTitle }}</Text>
         </template>
         <Row :gutter="24">
-          <Col :xs="24" :sm="24" :md="24" @click="openPage(row.clipId)" style="cursor: pointer">
+          <Col :xs="24" :sm="24" :md="24" @click="openPage(link)" style="cursor: pointer">
             <Image
                 :src="
-                row.cover ||
+                `${this.baseUrl}/bilibili/${row.cover.substring(row.cover.lastIndexOf('/') + 1)}` ||
                 'https://lain.bgm.tv/img/no_icon_subject.png'
               "
                 fit="cover"
@@ -99,7 +102,7 @@ export default {
           </Col>
           <Col :xs="24" :sm="24" :md="24">
             <p style="margin-top: 8px;">
-              <Text>更新事件：{{ row.order }}</Text>
+              <Text>更新时间：{{ row.order }}</Text>
             </p>
 <!--            <div v-if="row.story" style="margin-top: 8px">
               <Paragraph type="secondary" ellipsis :ellipsisConfig="{tooltip: true, rows: 6}">{{ row.story }}</Paragraph>
