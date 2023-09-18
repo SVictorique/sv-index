@@ -16,6 +16,7 @@
                 <DropdownItem @click="$router.push('/music')">音乐</DropdownItem>
                 <DropdownItem @click="$router.push('/game')">游戏</DropdownItem>
                 <DropdownItem @click="$router.push('/real')">三次元</DropdownItem>
+                <DropdownItem @click="$router.push('/movie')">电影</DropdownItem>
                 <DropdownItem @click="$router.push('/video')">电视剧</DropdownItem>
                 <DropdownItem @click="$router.push('/about')">关于</DropdownItem>
               </DropdownMenu>
@@ -28,6 +29,7 @@
           <MenuItem name="music" to="/music">音乐</MenuItem>
           <MenuItem name="game" to="/game">游戏</MenuItem>
           <MenuItem name="real" to="/real">三次元</MenuItem>
+          <MenuItem name="movie" to="/movie">电影</MenuItem>
           <MenuItem name="video" to="/video">电视剧</MenuItem>
           <MenuItem name="about" to="/about">关于</MenuItem>
         </div>
