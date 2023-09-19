@@ -128,7 +128,7 @@ export default {
       })
     },
     goDetail(id) {
-      this.$router.push(`/anime1/detail?id=${id}`)
+      window.open(`https://anime1.me/?cat=${id}`)
     },
   },
 }
