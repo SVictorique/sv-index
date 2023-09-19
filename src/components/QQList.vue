@@ -1,12 +1,15 @@
 <script>
+import {useQQList} from "@/stores/qq-list";
 import {useSubjectList} from "@/stores/subject-list";
-import {Image, Space, Text} from "view-ui-plus";
+import {Image} from "view-ui-plus";
 
 export default {
-  name: "PoxiaoTeleplay",
-  components: {Space, Text, Image},
+  name: "QQList",
+  components: {Image},
   data() {
     return {
+      channelId: 100113,
+      sort: 79,
       listData: [],
       originData: [],
       pageSize: 12,
@@ -33,26 +36,62 @@ export default {
     },
     fetchData() {
       this.spinShow = true;
-      fetch(`${this.baseUrl}/poxiao/poxiao-teleplay.json`)
+      fetch(`https://pbaccess.video.qq.com/trpc.vector_layout.page_view.PageService/getPage?teleplay_appid=3000010`, {
+        method: 'post',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          "page_context": {
+            "page_index": String(this.pageCurr-1)
+          },
+          "page_params": {
+            "page_id": "channel_list_second_page",
+            "page_type": "operation",
+            "channel_id": `${this.channelId}`,
+            "filter_params": `ifeature=-1&iarea=-1&iyear=-1&ipay=-1&sort=${this.sort}`,
+            "page": String(this.pageCurr-1)
+          },
+          "page_bypass_params": {
+            "params": {
+              "page_id": "channel_list_second_page",
+              "page_type": "operation",
+              "channel_id": `${this.channelId}`,
+              "filter_params": `ifeature=-1&iarea=-1&iyear=-1&ipay=-1&sort=${this.sort}`,
+              "page": String(this.pageCurr-1),
+              "caller_id": "3000010",
+              "platform_id": "2",
+              "data_mode": "default",
+              "user_mode": "default"
+            },
+            "scene": "operation",
+            "abtest_bypass_id": "7ea5673d46432814"
+          }
+        })
+      })
           .then(d => d.json())
           .then(res => {
-            this.total = res.length
-
-            this.originData = res;
+            let cardList = null;
+            if (res.data.CardList.length === 2) {
+              cardList = res.data.CardList[1];
+            } else {
+              cardList = res.data.CardList[0];
+            }
+            this.total = Number(cardList.params.total_teleplay);
+            this.listData = [];
+            for (const card of cardList.children_list.list.cards) {
+              this.listData.push(card.params)
+            }
             this.spinShow = false;
-
-            this.listData = this.originData.slice(
-                this.pageSize * (this.pageCurr - 1),
-                this.pageSize * this.pageCurr
-            )
           });
     },
-    openPage(url) {
-      window.open(url)
-    }
+    openPage(cid) {
+      window.open(`https://v.qq.com/x/cover/${cid}.html`)
+    },
   },
   created() {
-    this.type = useSubjectList().type;
+    this.channelId = useQQList().channelId;
+    this.sort = useQQList().sort;
     this.limit = Number(this.$route.query.limit) || this.pageSize;
     this.offset = Number(this.$route.query.offset) || this.pageCurr;
     this.keyword = this.$route.query.keyword || this.keyword;
@@ -79,18 +118,19 @@ export default {
       <Card style="height: 100%;">
         <template #title>
           <p v-line-clamp="1" style="word-break: break-all">
-            {{ row.name }}
+            {{ row.title }}
           </p>
-          <!--          <Text type="secondary">{{ row.type }}</Text>-->
+          <Text type="secondary">{{ row.second_title }}</Text>
         </template>
         <Row :gutter="24">
-          <Col :xs="24" :sm="24" :md="24" @click="openPage(row.href)" style="cursor: pointer">
+          <Col :xs="24" :sm="24" :md="24" @click="openPage(row.cid)" style="cursor: pointer">
             <Image
-                :src="row.cover ||
+                :src="
+                row.new_pic_vt ||
                 'https://lain.bgm.tv/img/no_icon_subject.png'
               "
                 fit="cover"
-                :alt="row.name"
+                :alt="row.title"
                 style="width: 100%"
             >
               <template #error>
@@ -100,25 +140,13 @@ export default {
             <Text
                 style="position: absolute; bottom: 0px; left: 12px; right: 12px; height: 30px; line-height: 30px; z-index: 1; color: #fff; font-size: 14px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); text-align: right;"
             >
-              <span style="position: absolute; left: 5px">{{ row.country }}</span>
-              <span style="position: absolute; right: 5px">评分：{{ row.score || '无' }}</span>
+              <span style="position: absolute; left: 5px">{{ row.timelong }}</span>
             </Text>
           </Col>
           <Col :xs="24" :sm="24" :md="24">
             <p style="margin-top: 8px;">
-              <Space direction="vertical">
-                <Text>导演：{{ row.director }}</Text>
-                <Text>类型：{{ row.type }}</Text>
-                <Text>上映时间：{{ row.time }}</Text>
-                <Text>演员：{{ row.performer }}</Text>
-              </Space>
+              <Text>上映时间：{{ row.publish_date }}</Text>
             </p>
-            <!--            <div v-if="row.story" style="margin-top: 8px">
-                          <Paragraph type="secondary" ellipsis :ellipsisConfig="{tooltip: true, rows: 6}">{{ row.story }}</Paragraph>
-                        </div>
-                        <div v-else>
-                          <Text type="secondary">暂无说明</Text>
-                        </div>-->
           </Col>
         </Row>
       </Card>

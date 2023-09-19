@@ -1,15 +1,19 @@
 <script>
+import MgtvList from "@/components/MgtvList.vue";
+import PoxiaoList from "@/components/PoxiaoList.vue";
 import BilibiliTeleplay from "@/components/teleplay/BilibiliTeleplay.vue";
 import IqiyiTeleplay from "@/components/teleplay/IqiyiTeleplay.vue";
-import MgtvTeleplay from "@/components/teleplay/MgtvTeleplay.vue";
-import PoxiaoTeleplay from "@/components/teleplay/PoxiaoTeleplay.vue";
 import QQTeleplay from "@/components/teleplay/QQTeleplay.vue";
 import YoukuTeleplay from "@/components/teleplay/YoukuTeleplay.vue";
+import {useMgtvList} from "@/stores/mgtv-list";
 import {usePageHeader} from "@/stores/page-header";
+import {usePoxiaoList} from "@/stores/poxiao-list";
+import {useQQList} from "@/stores/qq-list";
+import {TabPane, Tabs} from "view-ui-plus";
 
 export default {
   name: 'TeleplayView',
-  components: {PoxiaoTeleplay, BilibiliTeleplay, MgtvTeleplay, YoukuTeleplay, QQTeleplay, IqiyiTeleplay},
+  components: {PoxiaoList, MgtvList, TabPane, Tabs, BilibiliTeleplay, YoukuTeleplay, QQTeleplay, IqiyiTeleplay},
   data() {
     return {
       tagName: 0
@@ -38,6 +42,16 @@ export default {
     usePageHeader().set({
       show: true,
       title: '电视剧',
+    });
+    useMgtvList().set({
+      channelId: 2,
+    });
+    usePoxiaoList().set({
+      type: 'teleplay'
+    });
+    useQQList().set({
+      channelId: 100113,
+      sort: 79,
     });
     if (this.$route.query.tagName) {
       this.tagName = Number(this.$route.query.tagName)
@@ -72,7 +86,7 @@ export default {
   </TabPane>
   <TabPane label="芒果">
     <div v-if="tagName === 3">
-      <MgtvTeleplay/>
+      <MgtvList/>
     </div>
   </TabPane>
   <TabPane label="Bilibili">
@@ -82,7 +96,7 @@ export default {
   </TabPane>
   <TabPane label="破晓">
     <div v-if="tagName === 5">
-      <PoxiaoTeleplay/>
+      <PoxiaoList/>
     </div>
   </TabPane>
 </Tabs>

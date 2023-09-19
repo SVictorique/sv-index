@@ -1,12 +1,14 @@
 <script>
+import {usePoxiaoList} from "@/stores/poxiao-list";
 import {useSubjectList} from "@/stores/subject-list";
-import {Image} from "view-ui-plus";
+import {Image, Space, Text} from "view-ui-plus";
 
 export default {
-  name: "MgtvTeleplay",
-  components: {Image},
+  name: "PoxiaoList",
+  components: {Space, Text, Image},
   data() {
     return {
+      type: 'anime',
       listData: [],
       originData: [],
       pageSize: 12,
@@ -33,32 +35,26 @@ export default {
     },
     fetchData() {
       this.spinShow = true;
-      const airDate = [];
-      if (this.dateStart) {
-        airDate.push(`>=${this.$Date(this.dateStart).format('YYYY-MM-DD')}`);
-      }
-      if (this.dateEnd) {
-        airDate.push(`<=${this.$Date(this.dateEnd).format('YYYY-MM-DD')}`);
-      }
-      const rank = [];
-      if (this.sort === 'rank') {
-        rank.push('>0')
-      }
-      fetch(`https://pianku.api.mgtv.com/rider/list/pcweb/v3?allowedRC=1&platform=pcweb&channelId=2&pn=${this.pageCurr}&pc=${this.pageSize}&hudong=1&_support=10000000&kind=a1&area=a1&year=all&chargeInfo=a1&sort=c1`)
+      fetch(`${this.baseUrl}/poxiao/poxiao-${this.type}.json`)
           .then(d => d.json())
           .then(res => {
-            this.total = res.data.totalHits
+            this.total = res.length
 
-            this.listData = res.data.hitDocs;
+            this.originData = res;
             this.spinShow = false;
+
+            this.listData = this.originData.slice(
+                this.pageSize * (this.pageCurr - 1),
+                this.pageSize * this.pageCurr
+            )
           });
     },
-    openPage(cid) {
-      window.open(`https://www.mgtv.com/b/${cid}`)
-    },
+    openPage(url) {
+      window.open(url)
+    }
   },
   created() {
-    this.type = useSubjectList().type;
+    this.type = usePoxiaoList().type;
     this.limit = Number(this.$route.query.limit) || this.pageSize;
     this.offset = Number(this.$route.query.offset) || this.pageCurr;
     this.keyword = this.$route.query.keyword || this.keyword;
@@ -85,19 +81,18 @@ export default {
       <Card style="height: 100%;">
         <template #title>
           <p v-line-clamp="1" style="word-break: break-all">
-            {{ row.title }}
+            {{ row.name }}
           </p>
-          <Text type="secondary">{{ row.kind.join(' / ') }}</Text>
+          <!--          <Text type="secondary">{{ row.type }}</Text>-->
         </template>
         <Row :gutter="24">
-          <Col :xs="24" :sm="24" :md="24" @click="openPage(row.clipId)" style="cursor: pointer">
+          <Col :xs="24" :sm="24" :md="24" @click="openPage(row.href)" style="cursor: pointer">
             <Image
-                :src="
-                row.img ||
+                :src="row.cover ||
                 'https://lain.bgm.tv/img/no_icon_subject.png'
               "
                 fit="cover"
-                :alt="row.title"
+                :alt="row.name"
                 style="width: 100%"
             >
               <template #error>
@@ -107,23 +102,25 @@ export default {
             <Text
                 style="position: absolute; bottom: 0px; left: 12px; right: 12px; height: 30px; line-height: 30px; z-index: 1; color: #fff; font-size: 14px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); text-align: right;"
             >
-              <span style="position: absolute; left: 5px">{{ row.updateInfo }}</span>
-              <span style="position: absolute; right: 5px">评分：{{ row.zhihuScore || '无' }}</span>
+              <span style="position: absolute; left: 5px">{{ row.country }}</span>
+              <span style="position: absolute; right: 5px">评分：{{ row.score || '无' }}</span>
             </Text>
           </Col>
           <Col :xs="24" :sm="24" :md="24">
             <p style="margin-top: 8px;">
-              <Text>上映时间：{{ row.se_updateTime }}</Text>
+              <Space direction="vertical">
+                <Text>导演：{{ row.director }}</Text>
+                <Text>类型：{{ row.type }}</Text>
+                <Text>上映时间：{{ row.time }}</Text>
+                <Text>演员：{{ row.performer }}</Text>
+              </Space>
             </p>
-            <div style="margin-top: 8px">
-              {{ row.subtitle }}
-            </div>
-            <div v-if="row.story" style="margin-top: 8px">
-              <Paragraph type="secondary" ellipsis :ellipsisConfig="{tooltip: true, rows: 6}">{{ row.story }}</Paragraph>
-            </div>
-            <div v-else>
-              <Text type="secondary">暂无说明</Text>
-            </div>
+            <!--            <div v-if="row.story" style="margin-top: 8px">
+                          <Paragraph type="secondary" ellipsis :ellipsisConfig="{tooltip: true, rows: 6}">{{ row.story }}</Paragraph>
+                        </div>
+                        <div v-else>
+                          <Text type="secondary">暂无说明</Text>
+                        </div>-->
           </Col>
         </Row>
       </Card>
