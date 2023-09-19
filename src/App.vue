@@ -44,17 +44,29 @@
 </template>
 
 <script>
-import {Button, Dropdown, DropdownItem, DropdownMenu, GlobalFooter, Menu, MenuItem} from "view-ui-plus";
+import {
+  Button,
+  Content,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  GlobalFooter, Image, Layout,
+  Menu,
+  MenuItem,
+  PageHeader
+} from "view-ui-plus";
 import {usePageHeader} from "@/stores/page-header";
 export default {
   name: 'App',
-  components: {GlobalFooter, DropdownItem, DropdownMenu, Button, Dropdown, MenuItem, Menu},
+  components: {
+    Layout,
+    Image, Content, PageHeader, GlobalFooter, DropdownItem, DropdownMenu, Button, Dropdown, MenuItem, Menu},
   data() {
     return {
       baseUrl: import.meta.env.BASE_URL,
       pageHeader: usePageHeader(),
       links: [{
-        href: 'https://github.com/SVictorique/sv-anime',
+        href: 'https://github.com/SVictorique/sv-index',
         blankTarget: true,
         icon: 'logo-github',
       }, {
