@@ -1,10 +1,10 @@
 <script>
 import {useSubjectList} from "@/stores/subject-list";
-import {Image} from "view-ui-plus";
+import {Image, Space, Text} from "view-ui-plus";
 
 export default {
-  name: "BilibiliVideoList",
-  components: {Image},
+  name: "PoxiaoAnime",
+  components: {Space, Text, Image},
   data() {
     return {
       listData: [],
@@ -33,13 +33,18 @@ export default {
     },
     fetchData() {
       this.spinShow = true;
-      fetch(`${this.baseUrl}/bilibili-episode.json`)
+      fetch(`${this.baseUrl}/poxiao/poxiao-anime.json`)
           .then(d => d.json())
           .then(res => {
             this.total = res.length
 
-            this.listData = res;
+            this.originData = res;
             this.spinShow = false;
+
+            this.listData = this.originData.slice(
+                this.pageSize * (this.pageCurr - 1),
+                this.pageSize * this.pageCurr
+            )
           });
     },
     openPage(url) {
@@ -74,19 +79,18 @@ export default {
       <Card style="height: 100%;">
         <template #title>
           <p v-line-clamp="1" style="word-break: break-all">
-            {{ row.title }}
+            {{ row.name }}
           </p>
-          <Text type="secondary">{{ row.subTitle }}</Text>
+          <!--          <Text type="secondary">{{ row.type }}</Text>-->
         </template>
         <Row :gutter="24">
-          <Col :xs="24" :sm="24" :md="24" @click="openPage(row.link)" style="cursor: pointer">
+          <Col :xs="24" :sm="24" :md="24" @click="openPage(row.href)" style="cursor: pointer">
             <Image
-                :src="
-                `${this.baseUrl}/bilibili/${row.cover.substring(row.cover.lastIndexOf('/') + 1)}` ||
+                :src="row.cover ||
                 'https://lain.bgm.tv/img/no_icon_subject.png'
               "
                 fit="cover"
-                :alt="row.title"
+                :alt="row.name"
                 style="width: 100%"
             >
               <template #error>
@@ -96,20 +100,25 @@ export default {
             <Text
                 style="position: absolute; bottom: 0px; left: 12px; right: 12px; height: 30px; line-height: 30px; z-index: 1; color: #fff; font-size: 14px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); text-align: right;"
             >
-              <span style="position: absolute; left: 5px">{{ row.index_show }}</span>
+              <span style="position: absolute; left: 5px">{{ row.country }}</span>
               <span style="position: absolute; right: 5px">评分：{{ row.score || '无' }}</span>
             </Text>
           </Col>
           <Col :xs="24" :sm="24" :md="24">
             <p style="margin-top: 8px;">
-              <Text>更新时间：{{ row.order }}</Text>
+              <Space direction="vertical">
+                <Text>导演：{{ row.director }}</Text>
+                <Text>类型：{{ row.type }}</Text>
+                <Text>上映时间：{{ row.time }}</Text>
+                <Text>演员：{{ row.performer }}</Text>
+              </Space>
             </p>
-<!--            <div v-if="row.story" style="margin-top: 8px">
-              <Paragraph type="secondary" ellipsis :ellipsisConfig="{tooltip: true, rows: 6}">{{ row.story }}</Paragraph>
-            </div>
-            <div v-else>
-              <Text type="secondary">暂无说明</Text>
-            </div>-->
+            <!--            <div v-if="row.story" style="margin-top: 8px">
+                          <Paragraph type="secondary" ellipsis :ellipsisConfig="{tooltip: true, rows: 6}">{{ row.story }}</Paragraph>
+                        </div>
+                        <div v-else>
+                          <Text type="secondary">暂无说明</Text>
+                        </div>-->
           </Col>
         </Row>
       </Card>

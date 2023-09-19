@@ -1,44 +1,16 @@
-<template>
-  <Tabs v-model="tagName" @on-click="tabChange">
-    <TabPane label="新番时间表">
-      <div v-if="tagName === 0">
-        <AnimeCalendar />
-      </div>
-    </TabPane>
-    <TabPane label="全部动画">
-      <div v-if="tagName === 1">
-        <BangumiList />
-      </div>
-    </TabPane>
-    <TabPane label="bgm动画">
-      <div v-if="tagName === 2">
-        <SubjectList />
-      </div>
-    </TabPane>
-    <TabPane label="Anime1">
-      <div v-if="tagName === 3">
-        <Anime1List />
-      </div>
-    </TabPane>
-    <TabPane label="Bilibili">
-      <div v-if="tagName === 4">
-        <BilibiliAnimeList />
-      </div>
-    </TabPane>
-  </Tabs>
-</template>
-
 <script>
-import Anime1List from "@/components/Anime1List.vue";
-import AnimeCalendar from "@/components/AnimeCalendar.vue";
-import BangumiList from "@/components/BangumiList.vue";
-import BilibiliAnimeList from "@/components/BilibiliAnimeList.vue";
+import Anime1Anime from "@/components/anime/Anime1Anime.vue";
+import AnimeCalendar from "@/components/anime/AnimeCalendar.vue";
+import BangumiAnime from "@/components/anime/BangumiAnime.vue";
+import BilibiliAnime from "@/components/anime/BilibiliAnime.vue";
+import PoxiaoAnime from "@/components/anime/PoxiaoAnime.vue";
 import SubjectList from "@/components/SubjectList.vue";
+import {usePageHeader} from "@/stores/page-header";
 import {TabPane} from 'view-ui-plus';
 
 export default {
   name: 'anime-view',
-  components: {BangumiList, BilibiliAnimeList, Anime1List, SubjectList, AnimeCalendar, TabPane },
+  components: {PoxiaoAnime, BilibiliAnime, Anime1Anime, BangumiAnime, AnimeCalendar, SubjectList, TabPane },
   data() {
     return {
       tagName: 0,
@@ -64,6 +36,10 @@ export default {
     },
   },
   created() {
+    usePageHeader().set({
+      show: true,
+      title: '动画',
+    });
     if (this.$route.query.tagName) {
       this.tagName = Number(this.$route.query.tagName)
     } else {
@@ -77,6 +53,41 @@ export default {
   }
 };
 </script>
+
+<template>
+  <Tabs v-model="tagName" @on-click="tabChange">
+    <TabPane label="新番时间表">
+      <div v-if="tagName === 0">
+        <AnimeCalendar/>
+      </div>
+    </TabPane>
+    <TabPane label="全部动画">
+      <div v-if="tagName === 1">
+        <BangumiAnime/>
+      </div>
+    </TabPane>
+    <TabPane label="bgm动画">
+      <div v-if="tagName === 2">
+        <SubjectList />
+      </div>
+    </TabPane>
+    <TabPane label="Anime1">
+      <div v-if="tagName === 3">
+        <Anime1Anime/>
+      </div>
+    </TabPane>
+    <TabPane label="Bilibili">
+      <div v-if="tagName === 4">
+        <BilibiliAnime/>
+      </div>
+    </TabPane>
+    <TabPane label="破晓">
+      <div v-if="tagName === 5">
+        <PoxiaoAnime/>
+      </div>
+    </TabPane>
+  </Tabs>
+</template>
 
 <style scoped>
 .ivu-form-item {

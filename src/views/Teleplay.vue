@@ -1,14 +1,15 @@
 <script>
-import MgtvVideoList from "@/components/video/MgtvVideoList.vue";
-import QQVideoList from "@/components/video/QQVideoList.vue";
-import YoukuVideoList from "@/components/video/YoukuVideoList.vue";
-import {TabPane, Tabs} from "view-ui-plus";
-import IqiyiVideoList from "@/components/video/IqiyiVideoList.vue";
-import BilibiliVideoList from "@/components/video/BilibiliVideoList.vue";
+import BilibiliTeleplay from "@/components/teleplay/BilibiliTeleplay.vue";
+import IqiyiTeleplay from "@/components/teleplay/IqiyiTeleplay.vue";
+import MgtvTeleplay from "@/components/teleplay/MgtvTeleplay.vue";
+import PoxiaoTeleplay from "@/components/teleplay/PoxiaoTeleplay.vue";
+import QQTeleplay from "@/components/teleplay/QQTeleplay.vue";
+import YoukuTeleplay from "@/components/teleplay/YoukuTeleplay.vue";
+import {usePageHeader} from "@/stores/page-header";
 
 export default {
-  name: 'VideoList',
-  components: {MgtvVideoList, YoukuVideoList, QQVideoList, Tabs, TabPane, IqiyiVideoList, BilibiliVideoList},
+  name: 'TeleplayView',
+  components: {PoxiaoTeleplay, BilibiliTeleplay, MgtvTeleplay, YoukuTeleplay, QQTeleplay, IqiyiTeleplay},
   data() {
     return {
       tagName: 0
@@ -34,6 +35,10 @@ export default {
     },
   },
   created() {
+    usePageHeader().set({
+      show: true,
+      title: '电视剧',
+    });
     if (this.$route.query.tagName) {
       this.tagName = Number(this.$route.query.tagName)
     } else {
@@ -52,27 +57,32 @@ export default {
 <Tabs v-model="tagName" @on-click="tabChange">
   <TabPane label="爱奇艺">
     <div v-if="tagName === 0">
-      <IqiyiVideoList/>
+      <IqiyiTeleplay/>
     </div>
   </TabPane>
   <TabPane label="腾讯">
     <div v-if="tagName === 1">
-      <QQVideoList/>
+      <QQTeleplay/>
     </div>
   </TabPane>
   <TabPane label="优酷">
     <div v-if="tagName === 2">
-      <YoukuVideoList/>
+      <YoukuTeleplay/>
     </div>
   </TabPane>
   <TabPane label="芒果">
     <div v-if="tagName === 3">
-      <MgtvVideoList/>
+      <MgtvTeleplay/>
     </div>
   </TabPane>
   <TabPane label="Bilibili">
     <div v-if="tagName === 4">
-      <BilibiliVideoList/>
+      <BilibiliTeleplay/>
+    </div>
+  </TabPane>
+  <TabPane label="破晓">
+    <div v-if="tagName === 5">
+      <PoxiaoTeleplay/>
     </div>
   </TabPane>
 </Tabs>

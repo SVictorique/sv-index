@@ -5,7 +5,7 @@
         <Typography>
           <Title :level="3">简介</Title>
           <Paragraph>
-            本网站主要基于番组计划数据，展示二次元文化（动画、书籍、音乐、游戏、三次元）相关信息，便于获取二次元相关信息。<br/>
+            本网站主要提供资源索引，包含但不限于动画、电视剧、电影、书籍、音乐及游戏。<br/>
             网站为纯前端项目，不记录任何使用者信息，所有数据存储基于localStorage和sessionStorage。<br/>
             本网站为本人个人开发项目，欢迎使用者提供建议（<Link target="_blank" style="display: inline" to="https://github.com/SVictorique">github</Link>或<Link target="_blank" style="display: inline" to="https://twitter.com/sv_yunfeng">twitter</Link>）
           </Paragraph>
@@ -21,6 +21,13 @@
             <ul>
               <li><Link target="_blank" to="https://bgm.tv/">番组计划</Link></li>
               <li><Link target="_blank" to="https://github.com/bangumi-data/bangumi-data">Bangumi Data</Link></li>
+              <li>anime1</li>
+              <li>爱奇艺</li>
+              <li>bilibili</li>
+              <li>芒果TV</li>
+              <li>破晓电影</li>
+              <li>腾讯视频</li>
+              <li>优酷视频</li>
             </ul>
           </Paragraph>
           <Title :level="3">技术支持</Title>

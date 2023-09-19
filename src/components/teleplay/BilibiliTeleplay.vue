@@ -3,7 +3,7 @@ import {useSubjectList} from "@/stores/subject-list";
 import {Image} from "view-ui-plus";
 
 export default {
-  name: "BilibiliAnimeList",
+  name: "BilibiliTeleplay",
   components: {Image},
   data() {
     return {
@@ -33,18 +33,13 @@ export default {
     },
     fetchData() {
       this.spinShow = true;
-      fetch(`${this.baseUrl}/bilibili-anime.json`)
+      fetch(`${this.baseUrl}/bilibili/bilibili-teleplay.json`)
           .then(d => d.json())
           .then(res => {
             this.total = res.length
 
-            this.originData = res;
+            this.listData = res;
             this.spinShow = false;
-
-            this.listData = this.originData.slice(
-                this.pageSize * (this.pageCurr - 1),
-                this.pageSize * this.pageCurr
-            )
           });
     },
     openPage(url) {
@@ -87,7 +82,7 @@ export default {
           <Col :xs="24" :sm="24" :md="24" @click="openPage(row.link)" style="cursor: pointer">
             <Image
                 :src="
-                `${this.baseUrl}/bilibili/${row.cover.substring(row.cover.lastIndexOf('/') + 1)}` ||
+                `${this.baseUrl}/bilibili/image/${row.cover.substring(row.cover.lastIndexOf('/') + 1)}` ||
                 'https://lain.bgm.tv/img/no_icon_subject.png'
               "
                 fit="cover"
@@ -109,12 +104,12 @@ export default {
             <p style="margin-top: 8px;">
               <Text>更新时间：{{ row.order }}</Text>
             </p>
-            <!--            <div v-if="row.story" style="margin-top: 8px">
-                          <Paragraph type="secondary" ellipsis :ellipsisConfig="{tooltip: true, rows: 6}">{{ row.story }}</Paragraph>
-                        </div>
-                        <div v-else>
-                          <Text type="secondary">暂无说明</Text>
-                        </div>-->
+<!--            <div v-if="row.story" style="margin-top: 8px">
+              <Paragraph type="secondary" ellipsis :ellipsisConfig="{tooltip: true, rows: 6}">{{ row.story }}</Paragraph>
+            </div>
+            <div v-else>
+              <Text type="secondary">暂无说明</Text>
+            </div>-->
           </Col>
         </Row>
       </Card>

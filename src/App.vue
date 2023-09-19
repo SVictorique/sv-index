@@ -4,7 +4,7 @@
       <Menu mode="horizontal" theme="dark" style="height: 64px; display: flex; z-index: 900">
         <div class="layout-logo" @click="this.$router.push(`/`)" style="cursor: pointer">
           <Image :src="`${baseUrl}/logo.svg`" :height="32" style="margin: 12px 0"></Image>
-          <h2 class="layout-title" @click="this.$router.push(`/`)" style="cursor: pointer">银小维 Anime</h2>
+          <h2 class="layout-title" @click="this.$router.push(`/`)" style="cursor: pointer">银小维 Index</h2>
         </div>
         <div class="layout-dropdown">
           <Dropdown trigger="click">
@@ -17,7 +17,7 @@
                 <DropdownItem @click="$router.push('/game')">游戏</DropdownItem>
                 <DropdownItem @click="$router.push('/real')">三次元</DropdownItem>
                 <DropdownItem @click="$router.push('/movie')">电影</DropdownItem>
-                <DropdownItem @click="$router.push('/video')">电视剧</DropdownItem>
+                <DropdownItem @click="$router.push('/teleplay')">电视剧</DropdownItem>
                 <DropdownItem @click="$router.push('/about')">关于</DropdownItem>
               </DropdownMenu>
             </template>
@@ -30,7 +30,7 @@
           <MenuItem name="game" to="/game">游戏</MenuItem>
           <MenuItem name="real" to="/real">三次元</MenuItem>
           <MenuItem name="movie" to="/movie">电影</MenuItem>
-          <MenuItem name="video" to="/video">电视剧</MenuItem>
+          <MenuItem name="teleplay" to="/teleplay">电视剧</MenuItem>
           <MenuItem name="about" to="/about">关于</MenuItem>
         </div>
       </Menu>

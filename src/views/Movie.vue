@@ -1,5 +1,6 @@
 <script>
 import PoxiaoMovie from "@/components/movie/PoxiaoMovie.vue";
+import {usePageHeader} from "@/stores/page-header";
 
 export default {
   name: 'MovieList',
@@ -29,6 +30,10 @@ export default {
     },
   },
   created() {
+    usePageHeader().set({
+      show: true,
+      title: '电影',
+    });
     if (this.$route.query.tagName) {
       this.tagName = Number(this.$route.query.tagName)
     } else {

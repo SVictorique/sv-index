@@ -1,13 +1,14 @@
 <script>
 import {useSubjectList} from "@/stores/subject-list";
-import {Image, List, ListItem, Text} from "view-ui-plus";
+import {Image} from "view-ui-plus";
 
 export default {
-  name: "IqiyiVideoList",
-  components: {Text, ListItem, List, Image},
+  name: "MgtvTeleplay",
+  components: {Image},
   data() {
     return {
       listData: [],
+      originData: [],
       pageSize: 12,
       pageCurr: 1,
       spinShow: false,
@@ -32,28 +33,28 @@ export default {
     },
     fetchData() {
       this.spinShow = true;
-      fetch(`https://mesh.if.iqiyi.com/portal/videolib/pcw/data?ret_num=${this.pageSize}&page_id=${this.pageCurr}&channel_id=2&mode=4`, {
-        method: 'get',
-      })
+      const airDate = [];
+      if (this.dateStart) {
+        airDate.push(`>=${this.$Date(this.dateStart).format('YYYY-MM-DD')}`);
+      }
+      if (this.dateEnd) {
+        airDate.push(`<=${this.$Date(this.dateEnd).format('YYYY-MM-DD')}`);
+      }
+      const rank = [];
+      if (this.sort === 'rank') {
+        rank.push('>0')
+      }
+      fetch(`https://pianku.api.mgtv.com/rider/list/pcweb/v3?allowedRC=1&platform=pcweb&channelId=2&pn=${this.pageCurr}&pc=${this.pageSize}&hudong=1&_support=10000000&kind=a1&area=a1&year=all&chargeInfo=a1&sort=c1`)
           .then(d => d.json())
           .then(res => {
-            this.total = res.extension.result_num;
-            this.listData = res.data;
+            this.total = res.data.totalHits
+
+            this.listData = res.data.hitDocs;
             this.spinShow = false;
-            for (const d of this.listData) {
-              d.cover_url = `${this.baseUrl}/iqiyi${d.image_url_normal.substring(d.image_url_normal.indexOf("/image/"))}`
-            }
           });
     },
-    openPage(url) {
-      window.open(url)
-    },
-    fetchPersonInfo(id) {
-      fetch(`https://pcw-api.iqiyi.com/strategy/pcw/data/playQiguanRightSide?entity_id=${id}`)
-          .then(res => res.json())
-          .then(res => {
-            console.log(res)
-          })
+    openPage(cid) {
+      window.open(`https://www.mgtv.com/b/${cid}`)
     },
   },
   created() {
@@ -78,7 +79,7 @@ export default {
         :sm="12"
         :md="8"
         :xl="6"
-        :xxl="8"
+        :xxl="4"
         style="margin: 12px 0"
     >
       <Card style="height: 100%;">
@@ -86,13 +87,13 @@ export default {
           <p v-line-clamp="1" style="word-break: break-all">
             {{ row.title }}
           </p>
-          <Text type="secondary">{{ row.desc }}</Text>
+          <Text type="secondary">{{ row.kind.join(' / ') }}</Text>
         </template>
         <Row :gutter="24">
-          <Col :xs="24" :sm="24" :md="24" :xxl="8" @click="openPage(row.page_url)" style="cursor: pointer">
+          <Col :xs="24" :sm="24" :md="24" @click="openPage(row.clipId)" style="cursor: pointer">
             <Image
                 :src="
-                row.cover_url ||
+                row.img ||
                 'https://lain.bgm.tv/img/no_icon_subject.png'
               "
                 fit="cover"
@@ -100,36 +101,25 @@ export default {
                 style="width: 100%"
             >
               <template #error>
-                <Image
-                    src="https://lain.bgm.tv/img/no_icon_subject.png"
-                    fit="cover"
-                    :alt="row.title"
-                    style="width: 100%"
-                >
-                </Image>
+                <Icon type="ios-image-outline" size="24" />
               </template>
             </Image>
             <Text
                 style="position: absolute; bottom: 0px; left: 12px; right: 12px; height: 30px; line-height: 30px; z-index: 1; color: #fff; font-size: 14px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); text-align: right;"
             >
-              <span style="position: absolute; left: 5px">{{ row.dq_updatestatus || '无' }}</span>
-              <span style="position: absolute; right: 5px">热度：{{ row.hot_score || '无' }}</span>
+              <span style="position: absolute; left: 5px">{{ row.updateInfo }}</span>
+              <span style="position: absolute; right: 5px">评分：{{ row.zhihuScore || '无' }}</span>
             </Text>
           </Col>
-          <Col :xs="24" :sm="24" :md="24" :xxl="16">
+          <Col :xs="24" :sm="24" :md="24">
             <p style="margin-top: 8px;">
-              <Text>上映时间：{{ row.showDate }}</Text>
+              <Text>上映时间：{{ row.se_updateTime }}</Text>
             </p>
             <div style="margin-top: 8px">
-              <span v-for="(item, index) in row.contributor" :key="item.id">
-                <Link @click="fetchPersonInfo(item.id)" style="width: auto; display: inline-block">
-                  {{ item.name }}
-                </Link>
-                <Text v-if="index < row.contributor.length - 1"> / </Text>
-              </span>
+              {{ row.subtitle }}
             </div>
-            <div v-if="row.description" style="margin-top: 8px">
-              <Paragraph type="secondary" ellipsis :ellipsisConfig="{tooltip: false, rows: 6}">{{ row.description }}</Paragraph>
+            <div v-if="row.story" style="margin-top: 8px">
+              <Paragraph type="secondary" ellipsis :ellipsisConfig="{tooltip: true, rows: 6}">{{ row.story }}</Paragraph>
             </div>
             <div v-else>
               <Text type="secondary">暂无说明</Text>

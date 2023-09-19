@@ -3,7 +3,6 @@ const fs = require("fs");
 const path = require("path");
 const run = async () => {
   const url = "https://www.youku.com/channel/webtv/list?filter=type_电视剧_sort_1";
-  //await axios.get("https://www.youku.com/channel/webtv/list?filter=type_电视剧_sort_1")
   const browser = await puppeteer.launch({headless: 'new'});
   const page = await browser.newPage();
 
@@ -24,7 +23,7 @@ const run = async () => {
   const videoInfos = await getVideoInfos(selector, page);
   console.log(videoInfos);
   const rootPath = path.resolve(__dirname);
-  fs.writeFileSync("/public/youku/video-data.json", JSON.stringify(videoInfos));
+  fs.writeFileSync(path.join(rootPath, "../public/youku/youku-teleplay.json"), JSON.stringify(videoInfos));
 
   await browser.close();
 }

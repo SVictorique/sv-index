@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require("path");
 
-module.exports = () => {
+module.exports.getAnimes = async () => {
   fetch(`https://d1zquzjgwo9yb.cloudfront.net/?_${Date.now()}`)
     .then(r => r.json())
     .then(r => {
@@ -18,6 +18,6 @@ module.exports = () => {
       }
 
       const rootPath = path.resolve(__dirname);
-      fs.writeFileSync(path.join(rootPath, '../public/anime1-data.json'), JSON.stringify(animeList))
+      fs.writeFileSync(path.join(rootPath, '../public/anime1/anime1-anime.json'), JSON.stringify(animeList))
     })
 }

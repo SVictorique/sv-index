@@ -17,10 +17,12 @@ const getData = async (seasonType) => {
     data.push(r.data.list);
     data = data.flat();
 
-    const promises = [];
-    for (const { cover } of r.data.list) {
-      const savePath = path.join(rootPath, '../public/bilibili/' + cover.substring(cover.lastIndexOf("/") + 1));
-      console.log(`${i} ${savePath}`)
+    const batchSize = 10;
+    let promises = [];
+    for (let j = 0; j < r.data.list.length; j++) {
+      const { cover } = r.data.list[j];
+      const savePath = path.join(rootPath, '../public/bilibili/image/' + cover.substring(cover.lastIndexOf("/") + 1));
+      console.log(`${seasonType} ${i} ${savePath}`)
       if (!fs.existsSync(savePath)) {
         const folderPath = savePath.substring(0, savePath.lastIndexOf("/")+1)
         fs.mkdirSync(folderPath, { recursive: true, })
@@ -31,18 +33,29 @@ const getData = async (seasonType) => {
           response.data.pipe(fs.createWriteStream(savePath));
         }))
       }
+
+      if (j % batchSize === 0) {
+        await Promise.all(promises);
+        promises = [];
+        await new Promise((resolve) => {
+          setTimeout(() => resolve(), 100);
+        });
+      }
     }
-    await Promise.all(promises)
+    await Promise.all(promises);
+    await new Promise((resolve) => {
+      setTimeout(() => resolve(), 100);
+    });
   }
   return data;
 }
 
 module.exports.getAnimes = async () => {
   const data = await getData(1);
-  fs.writeFileSync(path.join(rootPath, "../public/bilibili-anime.json"), JSON.stringify(data));
+  fs.writeFileSync(path.join(rootPath, "../public/bilibili/bilibili-anime.json"), JSON.stringify(data));
 }
 
-module.exports.getEpisode = async () => {
+module.exports.getTeleplays = async () => {
   const data = await getData(5);
-  fs.writeFileSync(path.join(rootPath, "../public/bilibili-episode.json"), JSON.stringify(data));
+  fs.writeFileSync(path.join(rootPath, "../public/bilibili/bilibili-teleplay.json"), JSON.stringify(data));
 }

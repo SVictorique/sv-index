@@ -1,10 +1,9 @@
 <script>
-import {usePageHeader} from "@/stores/page-header";
 import {useSubjectList} from "@/stores/subject-list";
 import {Tooltip} from "view-ui-plus";
 
 export default {
-  name: 'BangumiList',
+  name: 'BangumiAnime',
   components: {Tooltip },
   data() {
     return {
@@ -21,41 +20,23 @@ export default {
   },
   watch: {
     '$route.query'() {
-      this.search = this.$route.query.search;
-      this.pageSize = Number(this.$route.query.size) || 12;
-      this.pageCurr = Number(this.$route.query.num ) || 1;
+      this.parseParam();
       this.getTableData();
     },
-    search(s) {
-      this.$router.push({
-        query: Object.assign({}, this.$route.query, {
-          search: s,
-          num: 1,
-        })
-      });
-    },
-    month(m) {
-      this.$router.push({
-        query: Object.assign({}, this.$route.query, { month: m ? this.$Date(m).format('YYYY-MM') : '' })
-      });
-    }
   },
   methods: {
     async getTableData() {
-      const search = this.$route.query.search;
-      const month = this.$route.query.month;
-
       this.tableData = this.animeData
           .filter((d) => {
             for (const key in d.titleTranslate) {
-              if (d.titleTranslate[key][0].indexOf(search) !== -1) {
+              if (d.titleTranslate[key][0].indexOf(this.search) !== -1) {
                 return true;
               }
             }
-            return !search || d.title.indexOf(search) !== -1;
+            return !this.search || d.title.indexOf(this.search) !== -1;
           })
           .filter((d) => {
-            return !month || d.begin.indexOf(month) !== -1;
+            return !this.month || d.begin.indexOf(this.month) !== -1;
           });
 
       this.total = this.tableData.length;
@@ -85,11 +66,13 @@ export default {
         d.epCnt = info.eps || info.total_episodes;
       }
     },
-    pageSizeChange() {
+    filterChange() {
       this.$router.push({
         query: Object.assign({}, this.$route.query, {
           size: this.pageSize,
           num: this.pageCurr,
+          search: this.search,
+          month: this.month ? this.$Date(this.month).format('YYYY-MM') : '',
         })
       })
     },
@@ -111,20 +94,22 @@ export default {
     goSubject(subjectId) {
       this.$router.push(`/subject/${subjectId}`);
     },
+    parseParam() {
+      this.pageSize = Number(this.$route.query.size) || 12;
+      this.pageCurr = Number(this.$route.query.num ) || 1;
+      this.search = this.$route.query.search || '';
+      this.month = this.$route.query.month || '';
+      if (!/^[1-9][0-9]*-((0[1-9])|(1[0-2]))$/.test(this.month)) {
+        this.month = '';
+      }
+    },
   },
   async created() {
-    usePageHeader().set({
-      show: true,
-      title: '动画',
-    });
     useSubjectList().set({
       type: 2,
     });
 
-    this.pageSize = Number(this.$route.query.size) || this.pageSize;
-    this.pageCurr = Number(this.$route.query.num) || this.pageCurr;
-    this.search = this.$route.query.search;
-    this.month = this.$route.query.month;
+    this.parseParam();
 
     let bangumiData;
     const storageKey = 'sv-anime-data';
@@ -157,7 +142,7 @@ export default {
   <div class="container">
     <Row :gutter="24">
       <Col style="padding: 10px 0 10px 24px">
-        <Input v-model="search" placeholder="Search" class="ivu-fr" style="width: 200px" clearable>
+        <Input v-model="search" placeholder="Search" class="ivu-fr" style="width: 200px" clearable @change="filterChange">
           <template #suffix>
             <Icon type="ios-search" />
           </template>
@@ -170,6 +155,7 @@ export default {
             v-model="month"
             placeholder="Select month"
             style="width: 200px"
+            @on-change="filterChange"
         />
       </Col>
     </Row>
@@ -328,8 +314,8 @@ export default {
           :page-size="pageSize"
           show-sizer
           show-elevator
-          @on-change="pageSizeChange"
-          @on-page-size-change="pageSizeChange"
+          @on-change="filterChange"
+          @on-page-size-change="filterChange"
       />
     </Card>
   </div>

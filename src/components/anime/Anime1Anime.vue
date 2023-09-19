@@ -18,7 +18,7 @@
 <script>
 import {Card, Page, Space} from "view-ui-plus";
 export default {
-  name: "Anime1List",
+  name: "Anime1Anime",
   components: {Page, Card, Space},
   data() {
     return {
@@ -69,7 +69,7 @@ export default {
     this.search = this.$route.query.search;
     this.season = this.$route.query.season;
 
-    fetch(`${this.baseUrl}/anime1-data.json`)
+    fetch(`${this.baseUrl}/anime1/anime1-anime.json`)
         .then(d => d.json())
         .then(d => {
           this.animeData = d
