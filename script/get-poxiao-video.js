@@ -1,5 +1,4 @@
 const host =  'https://poxiao.com';
-const { logger } = require('../../util/log-util');
 const {JSDOM} = require("jsdom");
 const axios = require("axios");
 const path = require("path");
@@ -40,7 +39,7 @@ module.exports = async () => {
 
 const fetchData = async (pageNo) => {
   try {
-    logger.info("fetch page %s", pageNo)
+    console.info("fetch page %s", pageNo)
 
     let url = '';
     if (pageNo === 1) {
