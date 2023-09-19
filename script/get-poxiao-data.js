@@ -34,7 +34,13 @@ const getData = async (type) => {
   list.push(l.flat())
 
   const rootPath = path.resolve(__dirname);
-  fs.writeFileSync(path.join(rootPath, `../public/poxiao/poxiao-${type}.json`), JSON.stringify(list.flat()));
+  const folderPath = path.join(rootPath, '../public/poxiao/');
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath, {
+      recursive: true,
+    })
+  }
+  fs.writeFileSync(path.join(folderPath, `poxiao-${type}.json`), JSON.stringify(list.flat()));
 }
 
 const fetchData = async (type, pageNo) => {

@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require("path");
+const {root} = require("../.eslintrc");
 
 module.exports.getAnimes = async () => {
   fetch(`https://d1zquzjgwo9yb.cloudfront.net/?_${Date.now()}`)
@@ -18,6 +19,12 @@ module.exports.getAnimes = async () => {
       }
 
       const rootPath = path.resolve(__dirname);
-      fs.writeFileSync(path.join(rootPath, '../public/anime1/anime1-anime.json'), JSON.stringify(animeList))
+      const folderPath = path.join(rootPath, '../public/anime1/');
+      if (!fs.existsSync(folderPath)) {
+        fs.mkdirSync(folderPath, {
+          recursive: true,
+        })
+      }
+      fs.writeFileSync(path.join(folderPath, 'anime1-anime.json'), JSON.stringify(animeList))
     })
 }

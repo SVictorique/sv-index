@@ -23,7 +23,13 @@ const run = async () => {
   const videoInfos = await getVideoInfos(selector, page);
   console.log(videoInfos);
   const rootPath = path.resolve(__dirname);
-  fs.writeFileSync(path.join(rootPath, "../public/youku/youku-teleplay.json"), JSON.stringify(videoInfos));
+  const folderPath = path.join(rootPath, '../public/youku/');
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath, {
+      recursive: true,
+    })
+  }
+  fs.writeFileSync(path.join(folderPath, "youku-teleplay.json"), JSON.stringify(videoInfos));
 
   await browser.close();
 }

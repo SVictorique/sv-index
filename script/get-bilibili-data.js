@@ -52,10 +52,22 @@ const getData = async (seasonType) => {
 
 module.exports.getAnimes = async () => {
   const data = await getData(1);
-  fs.writeFileSync(path.join(rootPath, "../public/bilibili/bilibili-anime.json"), JSON.stringify(data));
+  const folderPath = path.join(rootPath, '../public/bilibili/');
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath, {
+      recursive: true,
+    })
+  }
+  fs.writeFileSync(path.join(folderPath, "bilibili-anime.json"), JSON.stringify(data));
 }
 
 module.exports.getTeleplays = async () => {
   const data = await getData(5);
-  fs.writeFileSync(path.join(rootPath, "../public/bilibili/bilibili-teleplay.json"), JSON.stringify(data));
+  const folderPath = path.join(rootPath, '../public/bilibili/');
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath, {
+      recursive: true,
+    })
+  }
+  fs.writeFileSync(path.join(folderPath, "bilibili-teleplay.json"), JSON.stringify(data));
 }
