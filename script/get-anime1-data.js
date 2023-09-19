@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require("path");
-const {root} = require("../.eslintrc");
 
 module.exports.getAnimes = async () => {
   fetch(`https://d1zquzjgwo9yb.cloudfront.net/?_${Date.now()}`)
