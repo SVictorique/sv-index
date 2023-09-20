@@ -1,9 +1,9 @@
 <script>
 import MgtvList from "@/components/MgtvList.vue";
 import PoxiaoList from "@/components/PoxiaoList.vue";
+import QQList from "@/components/QQList.vue";
 import BilibiliTeleplay from "@/components/teleplay/BilibiliTeleplay.vue";
 import IqiyiTeleplay from "@/components/teleplay/IqiyiTeleplay.vue";
-import QQTeleplay from "@/components/teleplay/QQTeleplay.vue";
 import YoukuTeleplay from "@/components/teleplay/YoukuTeleplay.vue";
 import {useMgtvList} from "@/stores/mgtv-list";
 import {usePageHeader} from "@/stores/page-header";
@@ -13,7 +13,7 @@ import {TabPane, Tabs} from "view-ui-plus";
 
 export default {
   name: 'TeleplayView',
-  components: {PoxiaoList, MgtvList, TabPane, Tabs, BilibiliTeleplay, YoukuTeleplay, QQTeleplay, IqiyiTeleplay},
+  components: {QQList, PoxiaoList, MgtvList, TabPane, Tabs, BilibiliTeleplay, YoukuTeleplay, IqiyiTeleplay},
   data() {
     return {
       tagName: 0
@@ -76,7 +76,7 @@ export default {
   </TabPane>
   <TabPane label="腾讯">
     <div v-if="tagName === 1">
-      <QQTeleplay/>
+      <QQList/>
     </div>
   </TabPane>
   <TabPane label="优酷">
