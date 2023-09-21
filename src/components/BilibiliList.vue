@@ -39,8 +39,12 @@ export default {
           .then(res => {
             this.total = res.length
 
-            this.listData = res;
+            this.originData = res;
             this.spinShow = false;
+            this.listData = this.originData.slice(
+                this.pageSize * (this.pageCurr - 1),
+                this.pageSize * this.pageCurr
+            )
           });
     },
     openPage(url) {
