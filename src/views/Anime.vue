@@ -2,15 +2,31 @@
 import Anime1Anime from "@/components/anime/Anime1Anime.vue";
 import AnimeCalendar from "@/components/anime/AnimeCalendar.vue";
 import BangumiAnime from "@/components/anime/BangumiAnime.vue";
-import BilibiliAnime from "@/components/anime/BilibiliAnime.vue";
-import PoxiaoAnime from "@/components/anime/PoxiaoAnime.vue";
+import BilibiliList from "@/components/BilibiliList.vue";
+import IqiyiList from "@/components/IqiyiList.vue";
+import MgtvList from "@/components/MgtvList.vue";
+import PoxiaoList from "@/components/PoxiaoList.vue";
+import QQList from "@/components/QQList.vue";
 import SubjectList from "@/components/SubjectList.vue";
+import YoukuList from "@/components/YoukuList.vue";
+import {useBilibiliList} from "@/stores/bilibili-list";
+import {useIqiyiList} from "@/stores/iqiyi-list";
+import {useMgtvList} from "@/stores/mgtv-list";
 import {usePageHeader} from "@/stores/page-header";
-import {TabPane} from 'view-ui-plus';
+import {usePoxiaoList} from "@/stores/poxiao-list";
+import {useQQList} from "@/stores/qq-list";
+import {useYoukuList} from "@/stores/youku-list";
+import {TabPane, Tabs} from 'view-ui-plus';
 
 export default {
   name: 'anime-view',
-  components: {PoxiaoAnime, BilibiliAnime, Anime1Anime, BangumiAnime, AnimeCalendar, SubjectList, TabPane },
+  components: {
+    Tabs,
+    BilibiliList,
+    MgtvList,
+    IqiyiList,
+    QQList,
+    YoukuList, PoxiaoList, Anime1Anime, BangumiAnime, AnimeCalendar, SubjectList, TabPane },
   data() {
     return {
       tagName: 0,
@@ -40,6 +56,25 @@ export default {
       show: true,
       title: '动画',
     });
+    useIqiyiList().set({
+      channelId: 4,
+    })
+    useQQList().set({
+      channelId: 100119,
+      sort: 79,
+    })
+    usePoxiaoList().set({
+      type: 'anime',
+    });
+    useYoukuList().set({
+      type: 'anime'
+    });
+    useMgtvList().set({
+      channelId: 50,
+    });
+    useBilibiliList().set({
+      type: 'anime',
+    })
     if (this.$route.query.tagName) {
       this.tagName = Number(this.$route.query.tagName)
     } else {
@@ -76,14 +111,34 @@ export default {
         <Anime1Anime/>
       </div>
     </TabPane>
-    <TabPane label="Bilibili">
+    <TabPane label="爱奇艺">
       <div v-if="tagName === 4">
-        <BilibiliAnime/>
+        <IqiyiList/>
+      </div>
+    </TabPane>
+    <TabPane label="腾讯">
+      <div v-if="tagName === 5">
+        <QQList/>
+      </div>
+    </TabPane>
+    <TabPane label="优酷">
+      <div v-if="tagName === 6">
+        <YoukuList/>
+      </div>
+    </TabPane>
+    <TabPane label="芒果">
+      <div v-if="tagName === 7">
+        <MgtvList/>
+      </div>
+    </TabPane>
+    <TabPane label="Bilibili">
+      <div v-if="tagName === 8">
+        <BilibiliList/>
       </div>
     </TabPane>
     <TabPane label="破晓">
-      <div v-if="tagName === 5">
-        <PoxiaoAnime/>
+      <div v-if="tagName === 9">
+        <PoxiaoList/>
       </div>
     </TabPane>
   </Tabs>

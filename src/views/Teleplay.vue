@@ -1,19 +1,22 @@
 <script>
+import BilibiliList from "@/components/BilibiliList.vue";
+import IqiyiList from "@/components/IqiyiList.vue";
 import MgtvList from "@/components/MgtvList.vue";
 import PoxiaoList from "@/components/PoxiaoList.vue";
 import QQList from "@/components/QQList.vue";
-import BilibiliTeleplay from "@/components/teleplay/BilibiliTeleplay.vue";
-import IqiyiTeleplay from "@/components/teleplay/IqiyiTeleplay.vue";
-import YoukuTeleplay from "@/components/teleplay/YoukuTeleplay.vue";
+import YoukuList from "@/components/YoukuList.vue";
+import {useBilibiliList} from "@/stores/bilibili-list";
+import {useIqiyiList} from "@/stores/iqiyi-list";
 import {useMgtvList} from "@/stores/mgtv-list";
 import {usePageHeader} from "@/stores/page-header";
 import {usePoxiaoList} from "@/stores/poxiao-list";
 import {useQQList} from "@/stores/qq-list";
+import {useYoukuList} from "@/stores/youku-list";
 import {TabPane, Tabs} from "view-ui-plus";
 
 export default {
   name: 'TeleplayView',
-  components: {QQList, PoxiaoList, MgtvList, TabPane, Tabs, BilibiliTeleplay, YoukuTeleplay, IqiyiTeleplay},
+  components: {BilibiliList, IqiyiList, YoukuList, QQList, PoxiaoList, MgtvList, TabPane, Tabs},
   data() {
     return {
       tagName: 0
@@ -43,15 +46,24 @@ export default {
       show: true,
       title: '电视剧',
     });
-    useMgtvList().set({
+    useIqiyiList().set({
       channelId: 2,
-    });
-    usePoxiaoList().set({
-      type: 'teleplay'
-    });
+    })
     useQQList().set({
       channelId: 100113,
       sort: 79,
+    });
+    useYoukuList().set({
+      type: 'teleplay'
+    });
+    useMgtvList().set({
+      channelId: 2,
+    });
+    useBilibiliList().set({
+      type: 'teleplay'
+    })
+    usePoxiaoList().set({
+      type: 'teleplay'
     });
     if (this.$route.query.tagName) {
       this.tagName = Number(this.$route.query.tagName)
@@ -71,7 +83,7 @@ export default {
 <Tabs v-model="tagName" @on-click="tabChange">
   <TabPane label="爱奇艺">
     <div v-if="tagName === 0">
-      <IqiyiTeleplay/>
+      <IqiyiList/>
     </div>
   </TabPane>
   <TabPane label="腾讯">
@@ -81,7 +93,7 @@ export default {
   </TabPane>
   <TabPane label="优酷">
     <div v-if="tagName === 2">
-      <YoukuTeleplay/>
+      <YoukuList/>
     </div>
   </TabPane>
   <TabPane label="芒果">
@@ -91,7 +103,7 @@ export default {
   </TabPane>
   <TabPane label="Bilibili">
     <div v-if="tagName === 4">
-      <BilibiliTeleplay/>
+      <BilibiliList/>
     </div>
   </TabPane>
   <TabPane label="破晓">

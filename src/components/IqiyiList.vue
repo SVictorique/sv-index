@@ -1,12 +1,13 @@
 <script>
-import {useSubjectList} from "@/stores/subject-list";
-import {Image, List, ListItem, Text} from "view-ui-plus";
+import {useIqiyiList} from "@/stores/iqiyi-list";
+import {Card, Col, Icon, Image, List, ListItem, Page, Paragraph, Row, Spin, Text} from "view-ui-plus";
 
 export default {
-  name: "IqiyiTeleplay",
-  components: {Text, ListItem, List, Image},
+  name: "IqiyiList",
+  components: {Page, Icon, Spin, Paragraph, Card, Col, Row, Text, ListItem, List, Image},
   data() {
     return {
+      channelId: 2,
       listData: [],
       pageSize: 12,
       pageCurr: 1,
@@ -32,7 +33,7 @@ export default {
     },
     fetchData() {
       this.spinShow = true;
-      fetch(`https://mesh.if.iqiyi.com/portal/videolib/pcw/data?ret_num=${this.pageSize}&page_id=${this.pageCurr}&channel_id=2&mode=4`, {
+      fetch(`https://mesh.if.iqiyi.com/portal/videolib/pcw/data?ret_num=${this.pageSize}&page_id=${this.pageCurr}&channel_id=${this.channelId}&mode=4`, {
         method: 'get',
       })
           .then(d => d.json())
@@ -57,7 +58,7 @@ export default {
     },
   },
   created() {
-    this.type = useSubjectList().type;
+    this.channelId = useIqiyiList().channelId;
     this.limit = Number(this.$route.query.limit) || this.pageSize;
     this.offset = Number(this.$route.query.offset) || this.pageCurr;
     this.keyword = this.$route.query.keyword || this.keyword;
@@ -110,7 +111,7 @@ export default {
               </template>
             </Image>
             <Text
-                style="position: absolute; bottom: 0px; left: 12px; right: 12px; height: 30px; line-height: 30px; z-index: 1; color: #fff; font-size: 14px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); text-align: right;"
+                style="position: absolute; bottom: 0; left: 12px; right: 12px; height: 30px; line-height: 30px; z-index: 1; color: #fff; font-size: 14px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); text-align: right;"
             >
               <span style="position: absolute; left: 5px">{{ row.dq_updatestatus || '无' }}</span>
               <span style="position: absolute; right: 5px">热度：{{ row.hot_score || '无' }}</span>

@@ -18,6 +18,7 @@
                 <DropdownItem @click="$router.push('/real')">三次元</DropdownItem>
                 <DropdownItem @click="$router.push('/movie')">电影</DropdownItem>
                 <DropdownItem @click="$router.push('/teleplay')">电视剧</DropdownItem>
+                <DropdownItem @click="$router.push('/variety')">综艺</DropdownItem>
                 <DropdownItem @click="$router.push('/about')">关于</DropdownItem>
               </DropdownMenu>
             </template>
@@ -31,6 +32,7 @@
           <MenuItem name="real" to="/real">三次元</MenuItem>
           <MenuItem name="movie" to="/movie">电影</MenuItem>
           <MenuItem name="teleplay" to="/teleplay">电视剧</MenuItem>
+          <MenuItem name="variety" to="/variety">综艺</MenuItem>
           <MenuItem name="about" to="/about">关于</MenuItem>
         </div>
       </Menu>

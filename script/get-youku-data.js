@@ -1,8 +1,21 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
 const path = require("path");
-const run = async () => {
-  const url = "https://www.youku.com/channel/webtv/list?filter=type_电视剧_sort_1";
+const getData = async (type) => {
+  let filterType;
+  if (type === 'teleplay') {
+    filterType = "电视剧";
+  } else if (type === 'anime') {
+    filterType = "动漫";
+  } else if (type === 'movie') {
+    filterType = '电影';
+  } else if (type === 'variety') {
+    filterType = '综艺';
+  } else {
+    return;
+  }
+  const url = `https://www.youku.com/channel/webcomic/list?filter=type_${filterType}_sort_1`;
+
   const browser = await puppeteer.launch({headless: 'new'});
   const page = await browser.newPage();
 
@@ -29,7 +42,7 @@ const run = async () => {
       recursive: true,
     })
   }
-  fs.writeFileSync(path.join(folderPath, "youku-teleplay.json"), JSON.stringify(videoInfos));
+  fs.writeFileSync(path.join(folderPath, `youku-${type}.json`), JSON.stringify(videoInfos));
 
   await browser.close();
 }
@@ -70,4 +83,12 @@ const scrollPage = async (page) => {
   })
 }
 
-run()
+module.exports.getAnimes = async () => getData('anime');
+module.exports.getTeleplays = async () => getData('teleplay');
+module.exports.getMovies = async () => getData('movie');
+module.exports.getVarieties = async () => getData('variety');
+
+module.exports.getAnimes();
+module.exports.getTeleplays();
+module.exports.getMovies();
+module.exports.getVarieties();

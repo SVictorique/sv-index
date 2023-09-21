@@ -7,7 +7,7 @@ const pageSize = 1000;
 const rootPath = path.resolve(__dirname);
 
 // seasonType 1:动漫 ;5:电视剧
-const getData = async (seasonType) => {
+const getData = async (seasonType, type) => {
   let data = [];
 
   const { data: res } = await axios.get(`${apiUrl}&season_type=${seasonType}&page=1&pagesize=1`);
@@ -47,27 +47,17 @@ const getData = async (seasonType) => {
       setTimeout(() => resolve(), 100);
     });
   }
-  return data;
-}
 
-module.exports.getAnimes = async () => {
-  const data = await getData(1);
   const folderPath = path.join(rootPath, '../public/bilibili/');
   if (!fs.existsSync(folderPath)) {
     fs.mkdirSync(folderPath, {
       recursive: true,
     })
   }
-  fs.writeFileSync(path.join(folderPath, "bilibili-anime.json"), JSON.stringify(data));
+  fs.writeFileSync(path.join(folderPath, `bilibili-${type}.json`), JSON.stringify(data));
 }
 
-module.exports.getTeleplays = async () => {
-  const data = await getData(5);
-  const folderPath = path.join(rootPath, '../public/bilibili/');
-  if (!fs.existsSync(folderPath)) {
-    fs.mkdirSync(folderPath, {
-      recursive: true,
-    })
-  }
-  fs.writeFileSync(path.join(folderPath, "bilibili-teleplay.json"), JSON.stringify(data));
-}
+module.exports.getAnimes = async () => getData(1, 'anime');
+module.exports.getMovies = async () => getData(2, 'movie');
+module.exports.getTeleplays = async () => getData(5, 'teleplay');
+module.exports.getVarieties =async () => getData(7, 'variety');

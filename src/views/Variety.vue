@@ -2,21 +2,19 @@
 import BilibiliList from "@/components/BilibiliList.vue";
 import IqiyiList from "@/components/IqiyiList.vue";
 import MgtvList from "@/components/MgtvList.vue";
-import PoxiaoList from "@/components/PoxiaoList.vue";
 import QQList from "@/components/QQList.vue";
 import YoukuList from "@/components/YoukuList.vue";
 import {useBilibiliList} from "@/stores/bilibili-list";
 import {useIqiyiList} from "@/stores/iqiyi-list";
 import {useMgtvList} from "@/stores/mgtv-list";
 import {usePageHeader} from "@/stores/page-header";
-import {usePoxiaoList} from "@/stores/poxiao-list";
 import {useQQList} from "@/stores/qq-list";
 import {useYoukuList} from "@/stores/youku-list";
 import {TabPane, Tabs} from "view-ui-plus";
 
 export default {
-  name: 'MovieList',
-  components: {BilibiliList, IqiyiList, YoukuList, QQList, PoxiaoList, Tabs, MgtvList, TabPane},
+  name: 'VarietyView',
+  components: {BilibiliList, IqiyiList, YoukuList, QQList, MgtvList, TabPane, Tabs},
   data() {
     return {
       tagName: 0
@@ -44,27 +42,24 @@ export default {
   created() {
     usePageHeader().set({
       show: true,
-      title: '电影',
+      title: '综艺',
     });
     useIqiyiList().set({
-      channelId: 1,
+      channelId: 6,
     })
     useQQList().set({
-      channelId: 100173,
-      sort: 75,
+      channelId: 100109,
+      sort: 46,
     });
     useYoukuList().set({
-      type: 'movie'
+      type: 'variety'
     });
     useMgtvList().set({
-      channelId: 3,
+      channelId: 1,
     });
     useBilibiliList().set({
-      type: 'movie',
+      type: 'variety',
     })
-    usePoxiaoList().set({
-      type: 'movie',
-    });
     if (this.$route.query.tagName) {
       this.tagName = Number(this.$route.query.tagName)
     } else {
@@ -104,11 +99,6 @@ export default {
   <TabPane label="Bilibili">
     <div v-if="tagName === 4">
       <BilibiliList/>
-    </div>
-  </TabPane>
-  <TabPane label="破晓">
-    <div v-if="tagName === 5">
-      <PoxiaoList/>
     </div>
   </TabPane>
 </Tabs>

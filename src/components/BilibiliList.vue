@@ -1,12 +1,13 @@
 <script>
-import {useSubjectList} from "@/stores/subject-list";
-import {Image} from "view-ui-plus";
+import {useBilibiliList} from "@/stores/bilibili-list";
+import {Card, Col, Icon, Image, Page, Row, Spin, Text} from "view-ui-plus";
 
 export default {
-  name: "BilibiliTeleplay",
-  components: {Image},
+  name: "BilibiliList",
+  components: {Page, Spin, Icon, Text, Card, Col, Row, Image},
   data() {
     return {
+      type: 'anime',
       listData: [],
       originData: [],
       pageSize: 12,
@@ -33,7 +34,7 @@ export default {
     },
     fetchData() {
       this.spinShow = true;
-      fetch(`${this.baseUrl}/bilibili/bilibili-teleplay.json`)
+      fetch(`${this.baseUrl}/bilibili/bilibili-${this.type}.json`)
           .then(d => d.json())
           .then(res => {
             this.total = res.length
@@ -47,7 +48,7 @@ export default {
     }
   },
   created() {
-    this.type = useSubjectList().type;
+    this.type = useBilibiliList().type;
     this.limit = Number(this.$route.query.limit) || this.pageSize;
     this.offset = Number(this.$route.query.offset) || this.pageCurr;
     this.keyword = this.$route.query.keyword || this.keyword;
@@ -94,7 +95,7 @@ export default {
               </template>
             </Image>
             <Text
-                style="position: absolute; bottom: 0px; left: 12px; right: 12px; height: 30px; line-height: 30px; z-index: 1; color: #fff; font-size: 14px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); text-align: right;"
+                style="position: absolute; bottom: 0; left: 12px; right: 12px; height: 30px; line-height: 30px; z-index: 1; color: #fff; font-size: 14px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); text-align: right;"
             >
               <span style="position: absolute; left: 5px">{{ row.index_show }}</span>
               <span style="position: absolute; right: 5px">评分：{{ row.score || '无' }}</span>

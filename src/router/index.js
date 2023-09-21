@@ -1,5 +1,6 @@
 import Movie from "@/views/Movie.vue";
 import Teleplay from "@/views/Teleplay.vue";
+import Variety from "@/views/Variety.vue";
 import { createRouter, createWebHashHistory } from 'vue-router';
 import Home from '@/views/Home.vue';
 import Anime from "@/views/Anime.vue";
@@ -77,6 +78,11 @@ const router = createRouter({
       path: '/movie',
       name: 'movie',
       component: Movie,
+    },
+    {
+      path: '/variety',
+      name: 'variety',
+      component: Variety,
     }
   ]
 })

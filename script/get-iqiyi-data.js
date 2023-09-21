@@ -1,8 +1,10 @@
 const axios = require("axios");
 const fs = require("fs");
-const path = require("path")
-const url = 'https://mesh.if.iqiyi.com/portal/videolib/pcw/data?ret_num=999999&page_id=1&channel_id=2&mode=4';
-module.exports.getImages = async () => {
+const path = require("path");
+
+const getImages = async (channelId) => {
+  const url = `https://mesh.if.iqiyi.com/portal/videolib/pcw/data?ret_num=999999&page_id=1&channel_id=${channelId}&mode=4`;
+
   const rootPath = path.resolve(__dirname);
 
   const res = await axios.get(url)
@@ -23,3 +25,8 @@ module.exports.getImages = async () => {
     }
   }
 }
+
+module.exports.getMovieImages = async () => getImages(1);
+module.exports.getTeleplayImages = async () => getImages(2);
+module.exports.getAnimeImages = async () => getImages(4);
+module.exports.getVarietyImages = async () => getImages(6);
