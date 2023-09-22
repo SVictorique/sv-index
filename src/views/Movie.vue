@@ -51,7 +51,7 @@ export default {
     })
     useQQList().set({
       channelId: 100173,
-      sort: 75,
+      sort: 10,
     });
     useYoukuList().set({
       type: 'movie'

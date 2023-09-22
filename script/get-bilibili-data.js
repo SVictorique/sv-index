@@ -2,7 +2,7 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 
-const apiUrl = 'https://api.bilibili.com/pgc/season/index/result?st=1&order=0&sort=0&type=1';
+const apiUrl = 'https://api.bilibili.com/pgc/season/index/result?order=6&sort=0&type=1';
 const pageSize = 1000;
 const rootPath = path.resolve(__dirname);
 
@@ -27,11 +27,17 @@ const getData = async (seasonType, type) => {
         const folderPath = savePath.substring(0, savePath.lastIndexOf("/")+1)
         fs.mkdirSync(folderPath, { recursive: true, })
 
-        promises.push(axios.get(cover, {
-          responseType: 'stream'
-        }).then(response => {
-          response.data.pipe(fs.createWriteStream(savePath));
-        }))
+        promises.push(new Promise(resolve => {
+          axios.get(cover, {
+            responseType: 'stream'
+          }).then(response => {
+            response.data.pipe(fs.createWriteStream(savePath));
+            resolve();
+          }).catch((e) => {
+            console.error(e);
+            resolve();
+          })
+        }));
       }
 
       if (j % batchSize === 0) {

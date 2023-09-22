@@ -1,11 +1,10 @@
 <script>
 import {useQQList} from "@/stores/qq-list";
-import {useSubjectList} from "@/stores/subject-list";
-import {Image} from "view-ui-plus";
+import {Card, Col, Icon, Image, Page, Row, Spin, Text} from "view-ui-plus";
 
 export default {
   name: "QQList",
-  components: {Image},
+  components: {Page, Icon, Spin, Text, Card, Col, Row, Image},
   data() {
     return {
       channelId: 100113,
@@ -36,7 +35,7 @@ export default {
     },
     fetchData() {
       this.spinShow = true;
-      fetch(`https://pbaccess.video.qq.com/trpc.vector_layout.page_view.PageService/getPage?teleplay_appid=3000010`, {
+      fetch(`https://pbaccess.video.qq.com/trpc.vector_layout.page_view.PageService/getPage?video_appid=3000010`, {
         method: 'post',
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +70,7 @@ export default {
       })
           .then(d => d.json())
           .then(res => {
-            let cardList = null;
+            let cardList;
             if (res.data.CardList.length === 2) {
               cardList = res.data.CardList[1];
             } else {
@@ -138,7 +137,7 @@ export default {
               </template>
             </Image>
             <Text
-                style="position: absolute; bottom: 0px; left: 12px; right: 12px; height: 30px; line-height: 30px; z-index: 1; color: #fff; font-size: 14px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); text-align: right;"
+                style="position: absolute; bottom: 0; left: 12px; right: 12px; height: 30px; line-height: 30px; z-index: 1; color: #fff; font-size: 14px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); text-align: right;"
             >
               <span style="position: absolute; left: 5px">{{ row.timelong }}</span>
             </Text>

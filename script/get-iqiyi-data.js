@@ -21,6 +21,8 @@ const getImages = async (channelId) => {
         responseType: 'stream'
       }).then(response => {
         response.data.pipe(fs.createWriteStream(savePath));
+      }).catch(e => {
+        console.error(e)
       })
     }
   }

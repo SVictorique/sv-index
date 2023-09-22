@@ -49,7 +49,7 @@ export default {
     })
     useQQList().set({
       channelId: 100109,
-      sort: 46,
+      sort: 23,
     });
     useYoukuList().set({
       type: 'variety'

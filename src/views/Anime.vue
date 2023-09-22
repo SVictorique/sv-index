@@ -61,7 +61,7 @@ export default {
     })
     useQQList().set({
       channelId: 100119,
-      sort: 79,
+      sort: 23,
     })
     usePoxiaoList().set({
       type: 'anime',
